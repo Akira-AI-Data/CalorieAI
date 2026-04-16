@@ -266,7 +266,7 @@ export default function SettingsPage() {
             <Settings className="w-6 h-6 text-primary" />
             Settings
           </h1>
-          <p className="text-muted text-sm mt-1">Manage your profile and goals</p>
+          <p className="text-muted-foreground text-sm mt-1">Manage your profile and goals</p>
         </div>
         <button
           onClick={handleSave}
@@ -290,7 +290,7 @@ export default function SettingsPage() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="sm:col-span-2">
-            <label className="block text-xs font-medium text-muted mb-1">Full Name</label>
+            <label className="block text-xs font-medium text-muted-foreground mb-1">Full Name</label>
             <input
               type="text"
               value={settings.personalInfo.fullName}
@@ -300,7 +300,7 @@ export default function SettingsPage() {
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-muted mb-1">Date of Birth</label>
+            <label className="block text-xs font-medium text-muted-foreground mb-1">Date of Birth</label>
             <input
               type="date"
               value={settings.personalInfo.dateOfBirth}
@@ -309,7 +309,7 @@ export default function SettingsPage() {
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-muted mb-1">Gender</label>
+            <label className="block text-xs font-medium text-muted-foreground mb-1">Gender</label>
             <select
               value={settings.personalInfo.gender}
               onChange={(e) => updatePersonalInfo('gender', e.target.value)}
@@ -321,18 +321,18 @@ export default function SettingsPage() {
             </select>
           </div>
           <div className="sm:col-span-2">
-            <label className="block text-xs font-medium text-muted mb-1">Email</label>
+            <label className="block text-xs font-medium text-muted-foreground mb-1">Email</label>
             <input
               type="email"
               value={settings.personalInfo.email}
               disabled
               readOnly
               placeholder="your@email.com"
-              className="w-full px-3 py-2.5 rounded-xl border border-border outline-none text-sm bg-muted-foreground/10 text-muted cursor-not-allowed"
+              className="w-full px-3 py-2.5 rounded-xl border border-border outline-none text-sm bg-muted-foreground/10 text-muted-foreground cursor-not-allowed"
             />
           </div>
           <div className="sm:col-span-2">
-            <label className="block text-xs font-medium text-muted mb-1">Home Location</label>
+            <label className="block text-xs font-medium text-muted-foreground mb-1">Home Location</label>
             <div className="flex gap-2">
               <input
                 type="text"
@@ -350,7 +350,7 @@ export default function SettingsPage() {
               />
             </div>
             {settings.personalInfo.latitude && settings.personalInfo.longitude && (
-              <p className="text-[10px] text-muted mt-1 flex items-center gap-1">
+              <p className="text-[10px] text-muted-foreground mt-1 flex items-center gap-1">
                 <MapPin className="w-3 h-3" />
                 {settings.personalInfo.latitude}, {settings.personalInfo.longitude}
               </p>
@@ -368,7 +368,7 @@ export default function SettingsPage() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs font-medium text-muted mb-1">Height (cm)</label>
+            <label className="block text-xs font-medium text-muted-foreground mb-1">Height (cm)</label>
             <input
               type="number"
               value={settings.bodyStats.height}
@@ -378,7 +378,7 @@ export default function SettingsPage() {
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-muted mb-1">Weight (kg)</label>
+            <label className="block text-xs font-medium text-muted-foreground mb-1">Weight (kg)</label>
             <input
               type="number"
               value={settings.bodyStats.weight}
@@ -388,7 +388,7 @@ export default function SettingsPage() {
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-muted mb-1">Age</label>
+            <label className="block text-xs font-medium text-muted-foreground mb-1">Age</label>
             <input
               type="number"
               value={settings.bodyStats.age}
@@ -398,7 +398,7 @@ export default function SettingsPage() {
             />
           </div>
           <div className="sm:col-span-2">
-            <label className="block text-xs font-medium text-muted mb-1">Activity Level</label>
+            <label className="block text-xs font-medium text-muted-foreground mb-1">Activity Level</label>
             <select
               value={settings.bodyStats.activityLevel}
               onChange={(e) => updateBodyStats('activityLevel', e.target.value)}
@@ -421,7 +421,7 @@ export default function SettingsPage() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="sm:col-span-2">
-            <label className="block text-xs font-medium text-muted mb-1">Calorie Goal (kcal)</label>
+            <label className="block text-xs font-medium text-muted-foreground mb-1">Calorie Goal (kcal)</label>
             <input
               type="number"
               value={settings.dailyGoals.calories}
@@ -431,7 +431,7 @@ export default function SettingsPage() {
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-muted mb-1">Protein (g)</label>
+            <label className="block text-xs font-medium text-muted-foreground mb-1">Protein (g)</label>
             <input
               type="number"
               value={settings.dailyGoals.protein}
@@ -441,7 +441,7 @@ export default function SettingsPage() {
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-muted mb-1">Carbs (g)</label>
+            <label className="block text-xs font-medium text-muted-foreground mb-1">Carbs (g)</label>
             <input
               type="number"
               value={settings.dailyGoals.carbs}
@@ -451,7 +451,7 @@ export default function SettingsPage() {
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-muted mb-1">Fat (g)</label>
+            <label className="block text-xs font-medium text-muted-foreground mb-1">Fat (g)</label>
             <input
               type="number"
               value={settings.dailyGoals.fat}
@@ -461,7 +461,7 @@ export default function SettingsPage() {
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-muted mb-1">Water (glasses)</label>
+            <label className="block text-xs font-medium text-muted-foreground mb-1">Water (glasses)</label>
             <input
               type="number"
               value={settings.dailyGoals.water}
@@ -489,7 +489,7 @@ export default function SettingsPage() {
         </div>
 
         {settings.familyProfiles.length === 0 ? (
-          <div className="text-center py-8 text-muted-foreground">
+          <div className="text-center py-8 text-muted-foreground-foreground">
             <Users className="w-10 h-10 mx-auto mb-2 opacity-50" />
             <p className="text-sm">No family profiles yet</p>
             <p className="text-xs mt-1">Add profiles to track allergies and preferences for family members</p>
@@ -511,7 +511,7 @@ export default function SettingsPage() {
                       <div>
                         <p className="text-sm font-medium text-foreground">{profile.name || 'New Profile'}</p>
                         {profile.allergies.length > 0 && (
-                          <p className="text-xs text-muted">{profile.allergies.length} allerg{profile.allergies.length === 1 ? 'y' : 'ies'}</p>
+                          <p className="text-xs text-muted-foreground">{profile.allergies.length} allerg{profile.allergies.length === 1 ? 'y' : 'ies'}</p>
                         )}
                       </div>
                     </div>
@@ -521,18 +521,18 @@ export default function SettingsPage() {
                           e.stopPropagation()
                           removeProfile(profile.id)
                         }}
-                        className="p-1.5 text-muted-foreground hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                        className="p-1.5 text-muted-foreground-foreground hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
-                      {isExpanded ? <ChevronUp className="w-4 h-4 text-muted-foreground" /> : <ChevronDown className="w-4 h-4 text-muted-foreground" />}
+                      {isExpanded ? <ChevronUp className="w-4 h-4 text-muted-foreground-foreground" /> : <ChevronDown className="w-4 h-4 text-muted-foreground-foreground" />}
                     </div>
                   </div>
 
                   {isExpanded && (
                     <div className="px-3 pb-3 border-t border-[#F6F6F6] space-y-4 pt-3">
                       <div>
-                        <label className="block text-xs font-medium text-muted mb-1">Name</label>
+                        <label className="block text-xs font-medium text-muted-foreground mb-1">Name</label>
                         <input
                           type="text"
                           value={profile.name}
@@ -543,7 +543,7 @@ export default function SettingsPage() {
                       </div>
 
                       <div>
-                        <label className="block text-xs font-medium text-muted mb-1">Date of Birth</label>
+                        <label className="block text-xs font-medium text-muted-foreground mb-1">Date of Birth</label>
                         <input
                           type="date"
                           value={profile.dateOfBirth}
@@ -554,7 +554,7 @@ export default function SettingsPage() {
 
                       {/* Allergies */}
                       <div>
-                        <label className="block text-xs font-medium text-muted mb-2">Allergies</label>
+                        <label className="block text-xs font-medium text-muted-foreground mb-2">Allergies</label>
                         <div className="flex flex-wrap gap-1.5 mb-2">
                           {commonAllergies.map((allergy) => {
                             const isActive = profile.allergies.includes(allergy)
@@ -601,7 +601,7 @@ export default function SettingsPage() {
 
                       {/* Excluded Ingredients */}
                       <div>
-                        <label className="block text-xs font-medium text-muted mb-2">Excluded Ingredients</label>
+                        <label className="block text-xs font-medium text-muted-foreground mb-2">Excluded Ingredients</label>
                         {profile.excludedIngredients.length > 0 && (
                           <div className="flex flex-wrap gap-1.5 mb-2">
                             {profile.excludedIngredients.map((ing) => (

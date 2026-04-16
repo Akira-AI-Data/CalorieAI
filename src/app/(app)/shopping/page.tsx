@@ -318,7 +318,7 @@ export default function ShoppingPage() {
 
       {/* Table Header */}
       {items.length > 0 && (
-        <div className="grid grid-cols-[1fr_80px_60px_auto] gap-2 px-4 py-2 text-xs font-semibold text-muted uppercase tracking-wide mb-1">
+        <div className="grid grid-cols-[1fr_80px_60px_auto] gap-2 px-4 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">
           <span>Item</span>
           <span className="text-center">Qty</span>
           <span className="text-center">Unit</span>
@@ -328,9 +328,9 @@ export default function ShoppingPage() {
 
       {items.length === 0 ? (
         <div className="text-center py-16">
-          <ShoppingBag className="w-12 h-12 text-muted-foreground mx-auto mb-3" />
-          <p className="text-muted mb-2">Shopping list is empty!</p>
-          <p className="text-xs text-muted-foreground">Add items manually or sync from your meal plan</p>
+          <ShoppingBag className="w-12 h-12 text-muted-foreground-foreground mx-auto mb-3" />
+          <p className="text-muted-foreground mb-2">Shopping list is empty!</p>
+          <p className="text-xs text-muted-foreground-foreground">Add items manually or sync from your meal plan</p>
         </div>
       ) : (
         <>
@@ -349,18 +349,18 @@ export default function ShoppingPage() {
                   <span className="text-sm font-medium text-foreground truncate">{item.name}</span>
                 </div>
                 <span className="text-sm text-foreground text-center font-semibold">{item.qty}</span>
-                <span className="text-xs text-muted text-center">{item.unit}</span>
+                <span className="text-xs text-muted-foreground text-center">{item.unit}</span>
                 <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                   <button
                     onClick={() => moveToPantry(item)}
-                    className="p-1.5 text-muted hover:text-primary hover:bg-primary/10 rounded-lg transition-all"
+                    className="p-1.5 text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-lg transition-all"
                     title="Move to Pantry"
                   >
                     <ArrowRight className="w-4 h-4" />
                   </button>
                   <button
                     onClick={() => removeItem(item.id)}
-                    className="p-1.5 text-muted-foreground hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"
+                    className="p-1.5 text-muted-foreground-foreground hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -373,7 +373,7 @@ export default function ShoppingPage() {
           {checked.length > 0 && (
             <>
               <div className="flex items-center justify-between mb-2">
-                <p className="text-xs font-medium text-muted uppercase tracking-wide">
+                <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
                   Purchased ({checked.length})
                 </p>
                 <button
@@ -396,13 +396,13 @@ export default function ShoppingPage() {
                       >
                         <Check className="w-3 h-3 text-white" />
                       </button>
-                      <span className="text-sm text-muted line-through truncate">{item.name}</span>
+                      <span className="text-sm text-muted-foreground line-through truncate">{item.name}</span>
                     </div>
-                    <span className="text-sm text-muted text-center">{item.qty}</span>
-                    <span className="text-xs text-muted text-center">{item.unit}</span>
+                    <span className="text-sm text-muted-foreground text-center">{item.qty}</span>
+                    <span className="text-xs text-muted-foreground text-center">{item.unit}</span>
                     <button
                       onClick={() => removeItem(item.id)}
-                      className="p-1.5 text-muted-foreground hover:text-red-500 rounded-lg transition-all opacity-0 group-hover:opacity-100"
+                      className="p-1.5 text-muted-foreground-foreground hover:text-red-500 rounded-lg transition-all opacity-0 group-hover:opacity-100"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>

@@ -140,7 +140,7 @@ export default function MyRecipesPage() {
       <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={onClose}>
         <div className="bg-card-bg rounded-3xl max-w-sm w-full shadow-2xl p-5" onClick={(e) => e.stopPropagation()}>
           <h2 className="text-lg font-bold text-foreground mb-1">Add to Meal Plan</h2>
-          <p className="text-xs text-muted mb-4">Select a day and meal type for "{recipe.name}"</p>
+          <p className="text-xs text-muted-foreground mb-4">Select a day and meal type for "{recipe.name}"</p>
           <div className="space-y-2 max-h-[50vh] overflow-y-auto">
             {dates.map((date) => {
               const d = new Date(date + 'T00:00:00')
@@ -176,7 +176,7 @@ export default function MyRecipesPage() {
             <Bookmark className="w-6 h-6 text-primary" />
             My Recipes
           </h1>
-          <p className="text-muted text-sm mt-1">
+          <p className="text-muted-foreground text-sm mt-1">
             {savedRecipes.length} saved recipe{savedRecipes.length !== 1 ? 's' : ''}
           </p>
         </div>
@@ -192,7 +192,7 @@ export default function MyRecipesPage() {
       {savedRecipes.length > 0 && (
         <div className="flex flex-wrap gap-2 mb-5">
           <div className="flex items-center gap-2 px-3 py-2 bg-card-bg border border-border rounded-xl flex-1 min-w-[200px]">
-            <Search className="w-4 h-4 text-muted-foreground" />
+            <Search className="w-4 h-4 text-muted-foreground-foreground" />
             <input
               type="text"
               value={searchQuery}
@@ -250,16 +250,16 @@ export default function MyRecipesPage() {
                     <div className="min-w-0">
                       <h3 className="font-semibold text-foreground text-sm truncate">{recipe.name}</h3>
                       <div className="flex items-center gap-2 mt-0.5 flex-wrap">
-                        <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                        <span className="flex items-center gap-1 text-xs text-muted-foreground-foreground">
                           <Globe className="w-3 h-3" /> {recipe.cuisine}
                         </span>
                         {recipe.ageRange && (
                           <span className="text-xs text-primary bg-primary/10 px-1.5 py-0.5 rounded-full">{recipe.ageRange}</span>
                         )}
-                        <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                        <span className="flex items-center gap-1 text-xs text-muted-foreground-foreground">
                           <Clock className="w-3 h-3" /> {recipe.prepTime}
                         </span>
-                        <span className="text-xs text-muted-foreground capitalize">{recipe.category}</span>
+                        <span className="text-xs text-muted-foreground-foreground capitalize">{recipe.category}</span>
                       </div>
                     </div>
                   </div>
@@ -269,15 +269,15 @@ export default function MyRecipesPage() {
                         e.stopPropagation()
                         removeRecipe(recipe.name)
                       }}
-                      className="p-1.5 text-muted-foreground hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                      className="p-1.5 text-muted-foreground-foreground hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
                       title="Remove from My Recipes"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
                     {isExpanded ? (
-                      <ChevronUp className="w-4 h-4 text-muted-foreground" />
+                      <ChevronUp className="w-4 h-4 text-muted-foreground-foreground" />
                     ) : (
-                      <ChevronDown className="w-4 h-4 text-muted-foreground" />
+                      <ChevronDown className="w-4 h-4 text-muted-foreground-foreground" />
                     )}
                   </div>
                 </div>
@@ -285,7 +285,7 @@ export default function MyRecipesPage() {
                 {isExpanded && (
                   <div className="overflow-hidden">
                     <div className="px-4 pb-4 border-t border-border">
-                      <p className="text-sm text-muted mt-3 mb-4">{recipe.description}</p>
+                      <p className="text-sm text-muted-foreground mt-3 mb-4">{recipe.description}</p>
 
                       {recipe.nutrients && recipe.nutrients.length > 0 && (
                         <div className="flex flex-wrap gap-1.5 mb-4">
@@ -331,12 +331,12 @@ export default function MyRecipesPage() {
           })}
         </div>
       ) : savedRecipes.length > 0 ? (
-        <div className="text-center py-16 text-muted-foreground">
+        <div className="text-center py-16 text-muted-foreground-foreground">
           <Search className="w-10 h-10 mx-auto mb-3 opacity-50" />
           <p className="text-sm">No recipes match your search</p>
         </div>
       ) : (
-        <div className="text-center py-16 text-muted-foreground">
+        <div className="text-center py-16 text-muted-foreground-foreground">
           <Bookmark className="w-10 h-10 mx-auto mb-3 opacity-50" />
           <p className="text-sm">No saved recipes yet</p>
           <p className="text-xs mt-1">Save recipes from the Cookbook to see them here</p>
@@ -355,12 +355,12 @@ export default function MyRecipesPage() {
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-bold text-foreground">Create Recipe</h2>
               <button onClick={() => setShowCreateModal(false)} className="p-1.5 hover:bg-background rounded-lg transition-colors">
-                <X className="w-5 h-5 text-muted-foreground" />
+                <X className="w-5 h-5 text-muted-foreground-foreground" />
               </button>
             </div>
             <div className="space-y-3">
               <div>
-                <label className="block text-xs font-medium text-muted mb-1">Name *</label>
+                <label className="block text-xs font-medium text-muted-foreground mb-1">Name *</label>
                 <input
                   type="text"
                   value={newRecipe.name}
@@ -371,7 +371,7 @@ export default function MyRecipesPage() {
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-muted mb-1">Category</label>
+                  <label className="block text-xs font-medium text-muted-foreground mb-1">Category</label>
                   <select
                     value={newRecipe.category}
                     onChange={(e) => setNewRecipe((p) => ({ ...p, category: e.target.value }))}
@@ -384,7 +384,7 @@ export default function MyRecipesPage() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-muted mb-1">Cuisine</label>
+                  <label className="block text-xs font-medium text-muted-foreground mb-1">Cuisine</label>
                   <input
                     type="text"
                     value={newRecipe.cuisine}
@@ -396,7 +396,7 @@ export default function MyRecipesPage() {
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-muted mb-1">Prep Time</label>
+                  <label className="block text-xs font-medium text-muted-foreground mb-1">Prep Time</label>
                   <input
                     type="text"
                     value={newRecipe.prepTime}
@@ -406,7 +406,7 @@ export default function MyRecipesPage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-muted mb-1">Emoji</label>
+                  <label className="block text-xs font-medium text-muted-foreground mb-1">Emoji</label>
                   <input
                     type="text"
                     value={newRecipe.emoji}
@@ -417,7 +417,7 @@ export default function MyRecipesPage() {
                 </div>
               </div>
               <div>
-                <label className="block text-xs font-medium text-muted mb-1">Description</label>
+                <label className="block text-xs font-medium text-muted-foreground mb-1">Description</label>
                 <input
                   type="text"
                   value={newRecipe.description}
@@ -427,7 +427,7 @@ export default function MyRecipesPage() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium text-muted mb-1">Ingredients (one per line)</label>
+                <label className="block text-xs font-medium text-muted-foreground mb-1">Ingredients (one per line)</label>
                 <textarea
                   value={newRecipe.ingredients}
                   onChange={(e) => setNewRecipe((p) => ({ ...p, ingredients: e.target.value }))}
@@ -437,7 +437,7 @@ export default function MyRecipesPage() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium text-muted mb-1">Instructions (one per line)</label>
+                <label className="block text-xs font-medium text-muted-foreground mb-1">Instructions (one per line)</label>
                 <textarea
                   value={newRecipe.instructions}
                   onChange={(e) => setNewRecipe((p) => ({ ...p, instructions: e.target.value }))}

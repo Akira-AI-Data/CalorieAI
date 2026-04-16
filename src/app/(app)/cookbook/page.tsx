@@ -148,7 +148,7 @@ function SearchableMultiSelect({
             {/* Search input */}
             <div className="p-2 border-b border-border">
               <div className="flex items-center gap-2 px-2 py-1.5 bg-background rounded-lg">
-                <Search className="w-3.5 h-3.5 text-muted-foreground" />
+                <Search className="w-3.5 h-3.5 text-muted-foreground-foreground" />
                 <input
                   type="text"
                   value={search}
@@ -174,7 +174,7 @@ function SearchableMultiSelect({
                   {opt}
                 </button>
               )) : (
-                <p className="px-3 py-4 text-xs text-muted-foreground text-center">No matches</p>
+                <p className="px-3 py-4 text-xs text-muted-foreground-foreground text-center">No matches</p>
               )}
             </div>
           </div>
@@ -203,10 +203,10 @@ function NutrientSmartPanel({
           Nutrient Smart — Your Deficiency Report
         </h3>
         <button onClick={onClose} className="p-1 hover:bg-background rounded-lg">
-          <X className="w-4 h-4 text-muted-foreground" />
+          <X className="w-4 h-4 text-muted-foreground-foreground" />
         </button>
       </div>
-      <p className="text-xs text-muted-foreground mb-4">
+      <p className="text-xs text-muted-foreground-foreground mb-4">
         Based on your recent meal plan, here are nutrients that need attention. Recipes below are sorted to address your biggest gaps first.
       </p>
 
@@ -271,16 +271,16 @@ function RecipeDetailModal({
               <span className="text-4xl">{recipe.emoji}</span>
               <div>
                 <h2 className="text-xl font-bold text-foreground">{recipe.name}</h2>
-                <div className="flex items-center gap-2 mt-1 text-xs text-muted">
+                <div className="flex items-center gap-2 mt-1 text-xs text-muted-foreground">
                   <span className="flex items-center gap-1"><Globe className="w-3 h-3" /> {recipe.cuisine}</span>
                   <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {recipe.prepTime}</span>
                 </div>
               </div>
             </div>
-            <button onClick={onClose} className="p-2 hover:bg-background rounded-xl"><X className="w-5 h-5 text-muted-foreground" /></button>
+            <button onClick={onClose} className="p-2 hover:bg-background rounded-xl"><X className="w-5 h-5 text-muted-foreground-foreground" /></button>
           </div>
 
-          <p className="text-sm text-muted mb-4">{recipe.description}</p>
+          <p className="text-sm text-muted-foreground mb-4">{recipe.description}</p>
 
           {/* Estimated Nutrition */}
           <div className="flex gap-4 mb-4 p-3 bg-background rounded-xl">
@@ -292,7 +292,7 @@ function RecipeDetailModal({
             ].map((m) => (
               <div key={m.label} className="text-center flex-1">
                 <p className="text-lg font-bold text-foreground">{m.value}</p>
-                <p className="text-[10px] text-muted-foreground">{m.label} ({m.unit})</p>
+                <p className="text-[10px] text-muted-foreground-foreground">{m.label} ({m.unit})</p>
               </div>
             ))}
           </div>
@@ -329,7 +329,7 @@ function RecipeDetailModal({
             onClick={() => onSave(recipe)}
             disabled={isSaved}
             className={`w-full py-3 rounded-xl font-medium text-sm transition-all flex items-center justify-center gap-2 ${
-              isSaved ? 'bg-background text-muted cursor-default' : 'bg-primary text-white hover:bg-primary/80'
+              isSaved ? 'bg-background text-muted-foreground cursor-default' : 'bg-primary text-white hover:bg-primary/80'
             }`}
           >
             <Bookmark className="w-4 h-4" />
@@ -424,7 +424,7 @@ export default function CookbookPage() {
             <ChefHat className="w-6 h-6 text-primary" />
             Cookbook
           </h1>
-          <p className="text-muted text-sm mt-1">
+          <p className="text-muted-foreground text-sm mt-1">
             {RECIPES.length} recipes personalized for you
           </p>
         </div>
@@ -496,7 +496,7 @@ export default function CookbookPage() {
           ))}
           <button
             onClick={() => { setSelectedCuisines([]); setSelectedIngredients([]) }}
-            className="text-xs text-muted-foreground hover:text-foreground ml-1"
+            className="text-xs text-muted-foreground-foreground hover:text-foreground ml-1"
           >
             Clear all
           </button>
@@ -506,7 +506,7 @@ export default function CookbookPage() {
       {/* Recipe Grid */}
       {recipes.length > 0 ? (
         <>
-          <p className="text-xs text-muted-foreground mb-3">
+          <p className="text-xs text-muted-foreground-foreground mb-3">
             Showing {recipes.length} recipe{recipes.length !== 1 ? 's' : ''}
             {nutrientSmart ? ' — sorted by nutrient coverage for your gaps' : ''}
           </p>
@@ -524,19 +524,19 @@ export default function CookbookPage() {
                     <button
                       onClick={(e) => { e.stopPropagation(); if (!isSaved) handleSaveRecipe(recipe) }}
                       className={`p-1.5 rounded-lg transition-colors ${
-                        isSaved ? 'text-primary bg-primary/10' : 'text-muted-foreground hover:text-primary hover:bg-primary/10'
+                        isSaved ? 'text-primary bg-primary/10' : 'text-muted-foreground-foreground hover:text-primary hover:bg-primary/10'
                       }`}
                     >
                       <Bookmark className={`w-4 h-4 ${isSaved ? 'fill-current' : ''}`} />
                     </button>
                   </div>
                   <h3 className="font-semibold text-foreground text-sm mb-1 line-clamp-2">{recipe.name}</h3>
-                  <p className="text-xs text-muted line-clamp-2 mb-3">{recipe.description}</p>
+                  <p className="text-xs text-muted-foreground line-clamp-2 mb-3">{recipe.description}</p>
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                    <span className="flex items-center gap-1 text-xs text-muted-foreground-foreground">
                       <Clock className="w-3 h-3" /> {recipe.prepTime}
                     </span>
-                    <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                    <span className="flex items-center gap-1 text-xs text-muted-foreground-foreground">
                       <Globe className="w-3 h-3" /> {recipe.cuisine}
                     </span>
                   </div>
@@ -554,7 +554,7 @@ export default function CookbookPage() {
           </div>
         </>
       ) : (
-        <div className="text-center py-20 text-muted-foreground">
+        <div className="text-center py-20 text-muted-foreground-foreground">
           <ChefHat className="w-12 h-12 mx-auto mb-3 opacity-30" />
           <p className="font-medium">No recipes match your filters</p>
           <p className="text-sm mt-1">Try adjusting your cuisine, ingredient, or category filters</p>

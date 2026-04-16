@@ -106,8 +106,8 @@ export default function PantryPage() {
       {/* Pantry Items */}
       {items.length === 0 ? (
         <div className="text-center py-16">
-          <Package className="w-12 h-12 text-muted-foreground mx-auto mb-3" />
-          <p className="text-muted-foreground">Your pantry is empty. Add items above!</p>
+          <Package className="w-12 h-12 text-muted-foreground-foreground mx-auto mb-3" />
+          <p className="text-muted-foreground-foreground">Your pantry is empty. Add items above!</p>
         </div>
       ) : (
         <div className="space-y-2">
@@ -120,12 +120,12 @@ export default function PantryPage() {
                 <span className="w-2 h-2 rounded-full bg-primary" />
                 <span className="text-sm font-medium text-foreground">{item.name}</span>
                 {item.quantity && (
-                  <span className="text-xs text-muted">{item.quantity}{item.unit ? ` ${item.unit}` : ''}</span>
+                  <span className="text-xs text-muted-foreground">{item.quantity}{item.unit ? ` ${item.unit}` : ''}</span>
                 )}
               </div>
               <button
                 onClick={() => removeItem(item.id)}
-                className="p-2 text-muted-foreground hover:text-red-500 hover:bg-red-50 rounded-lg transition-all opacity-0 group-hover:opacity-100"
+                className="p-2 text-muted-foreground-foreground hover:text-red-500 hover:bg-red-50 rounded-lg transition-all opacity-0 group-hover:opacity-100"
               >
                 <Trash2 className="w-4 h-4" />
               </button>

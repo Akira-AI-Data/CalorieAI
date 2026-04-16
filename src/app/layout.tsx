@@ -1,18 +1,11 @@
-import type { Metadata, Viewport } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
+import type { Metadata } from 'next';
+import { Outfit, Manrope } from 'next/font/google';
 import { SessionProvider } from '@/components/providers/SessionProvider';
 import { ThemeProvider } from '@/components/providers/ThemeProvider';
 import './globals.css';
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
-});
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
-});
+const outfit = Outfit({ variable: '--font-outfit', subsets: ['latin'], display: 'swap' });
+const manrope = Manrope({ variable: '--font-manrope', subsets: ['latin'], display: 'swap' });
 
 export const metadata: Metadata = {
   title: 'NourishSnap',
@@ -34,7 +27,7 @@ export const viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
-  themeColor: '#22C55E',
+  themeColor: '#1E3F20',
 };
 
 export default function RootLayout({
@@ -43,7 +36,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full`} suppressHydrationWarning>
+    <html lang="en" className={`${outfit.variable} ${manrope.variable} h-full`} suppressHydrationWarning>
       <head>
         <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
         <meta name="apple-mobile-web-app-capable" content="yes" />

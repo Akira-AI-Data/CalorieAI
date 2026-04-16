@@ -83,16 +83,16 @@ export default function ProgressPage() {
         <div className="flex items-center gap-2">
           <button
             onClick={() => setWeekOffset((o) => o - 1)}
-            className="w-8 h-8 rounded-lg bg-card-bg border border-border flex items-center justify-center hover:bg-primary/5 transition-colors"
+            className="w-8 h-8 rounded-lg bg-card border border-border flex items-center justify-center hover:bg-primary/5 transition-colors"
           >
-            <ChevronLeft className="w-4 h-4 text-muted" />
+            <ChevronLeft className="w-4 h-4 text-muted-foreground" />
           </button>
-          <span className="text-sm text-muted min-w-[110px] text-center">{weekLabel}</span>
+          <span className="text-sm text-muted-foreground min-w-[110px] text-center">{weekLabel}</span>
           <button
             onClick={() => setWeekOffset((o) => o + 1)}
-            className="w-8 h-8 rounded-lg bg-card-bg border border-border flex items-center justify-center hover:bg-primary/5 transition-colors"
+            className="w-8 h-8 rounded-lg bg-card border border-border flex items-center justify-center hover:bg-primary/5 transition-colors"
           >
-            <ChevronRight className="w-4 h-4 text-muted" />
+            <ChevronRight className="w-4 h-4 text-muted-foreground" />
           </button>
         </div>
       </div>
@@ -100,7 +100,7 @@ export default function ProgressPage() {
       {/* Stat Cards */}
       <div className="grid grid-cols-2 gap-3">
         {stats.map((stat) => (
-          <div key={stat.label} className="bg-card-bg border border-border rounded-2xl p-4 space-y-2">
+          <div key={stat.label} className="bg-card border border-border rounded-2xl p-4 space-y-2">
             <div className="flex items-center gap-2">
               <div
                 className="w-8 h-8 rounded-lg flex items-center justify-center"
@@ -108,11 +108,11 @@ export default function ProgressPage() {
               >
                 <stat.icon className="w-4 h-4" style={{ color: stat.color }} />
               </div>
-              <span className="text-xs text-muted">{stat.label}</span>
+              <span className="text-xs text-muted-foreground">{stat.label}</span>
             </div>
             <div className="flex items-baseline gap-1">
               <span className="text-2xl font-bold">{stat.value}</span>
-              {stat.unit && <span className="text-sm text-muted">{stat.unit}</span>}
+              {stat.unit && <span className="text-sm text-muted-foreground">{stat.unit}</span>}
             </div>
             {stat.change && (
               <div className="flex items-center gap-1">
@@ -128,7 +128,7 @@ export default function ProgressPage() {
                 >
                   {stat.change}
                 </span>
-                {stat.suffix && <span className="text-xs text-muted">{stat.suffix}</span>}
+                {stat.suffix && <span className="text-xs text-muted-foreground">{stat.suffix}</span>}
               </div>
             )}
           </div>
@@ -137,15 +137,15 @@ export default function ProgressPage() {
 
       {/* Weekly Calories Bar Chart */}
       <div className="space-y-3">
-        <h2 className="text-sm font-semibold text-muted uppercase tracking-wider">Weekly Calories</h2>
-        <div className="bg-card-bg rounded-2xl border border-border p-4">
+        <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Weekly Calories</h2>
+        <div className="bg-card rounded-2xl border border-border p-4">
           <div className="flex items-end justify-between gap-2" style={{ height: 180 }}>
             {weeklyCalories.map((d) => {
               const height = (d.cal / maxCal) * 150;
               const overGoal = d.cal > dailyGoal;
               return (
                 <div key={d.day} className="flex flex-col items-center gap-1 flex-1">
-                  <span className="text-[10px] text-muted font-medium">{d.cal > 0 ? d.cal : ''}</span>
+                  <span className="text-[10px] text-muted-foreground font-medium">{d.cal > 0 ? d.cal : ''}</span>
                   <div className="relative w-full flex justify-center" style={{ height: 150 }}>
                     <div
                       className={`w-7 rounded-t-md transition-all ${
@@ -154,7 +154,7 @@ export default function ProgressPage() {
                       style={{ height, position: 'absolute', bottom: 0 }}
                     />
                   </div>
-                  <span className="text-xs text-muted">{d.day}</span>
+                  <span className="text-xs text-muted-foreground">{d.day}</span>
                 </div>
               );
             })}
@@ -169,15 +169,15 @@ export default function ProgressPage() {
           {/* Goal line label */}
           <div className="flex items-center gap-2 mt-3 pt-3 border-t border-border">
             <div className="w-4 border-t-2 border-dashed border-muted" />
-            <span className="text-[10px] text-muted">Daily goal ({dailyGoal} cal)</span>
+            <span className="text-[10px] text-muted-foreground">Daily goal ({dailyGoal} cal)</span>
             <div className="flex items-center gap-3 ml-auto">
               <div className="flex items-center gap-1">
                 <div className="w-2 h-2 rounded-sm bg-primary/80" />
-                <span className="text-[10px] text-muted">Under</span>
+                <span className="text-[10px] text-muted-foreground">Under</span>
               </div>
               <div className="flex items-center gap-1">
                 <div className="w-2 h-2 rounded-sm bg-red-500/80" />
-                <span className="text-[10px] text-muted">Over</span>
+                <span className="text-[10px] text-muted-foreground">Over</span>
               </div>
             </div>
           </div>
@@ -186,8 +186,8 @@ export default function ProgressPage() {
 
       {/* Weight Trend Line Chart */}
       <div className="space-y-3">
-        <h2 className="text-sm font-semibold text-muted uppercase tracking-wider">Weight Trend</h2>
-        <div className="bg-card-bg rounded-2xl border border-border p-4">
+        <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Weight Trend</h2>
+        <div className="bg-card rounded-2xl border border-border p-4">
           <svg viewBox={`0 0 ${chartW} ${chartH + 20}`} className="w-full" preserveAspectRatio="xMidYMid meet">
             {/* Horizontal grid lines */}
             {[minW, minW + (maxW - minW) / 2, maxW].map((v, i) => {
@@ -237,9 +237,9 @@ export default function ProgressPage() {
             <div className="flex items-center gap-1.5">
               <TrendingDown className="w-4 h-4 text-primary" />
               <span className="text-sm text-primary font-medium">-2.2 kg</span>
-              <span className="text-xs text-muted">total lost</span>
+              <span className="text-xs text-muted-foreground">total lost</span>
             </div>
-            <span className="text-xs text-muted">
+            <span className="text-xs text-muted-foreground">
               {weightData[0].date} - {weightData[weightData.length - 1].date}
             </span>
           </div>

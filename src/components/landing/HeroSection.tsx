@@ -1,147 +1,133 @@
 'use client';
 
+import { useRef } from 'react';
+import { motion, useScroll, useTransform } from 'motion/react';
 import Link from 'next/link';
-import Image from 'next/image';
-import { motion } from 'motion/react';
-import { ArrowRight, Play } from 'lucide-react';
+import { ArrowRight, Star } from 'lucide-react';
 
-function FloatingElement({
-  children,
-  delay = 0,
-  duration = 6,
-  y = 20,
-  className = '',
-}: {
-  children: React.ReactNode;
-  delay?: number;
-  duration?: number;
-  y?: number;
-  className?: string;
-}) {
-  return (
-    <motion.div
-      animate={{
-        y: [-y / 2, y / 2, -y / 2],
-        rotate: [-2, 2, -2],
-      }}
-      transition={{
-        duration,
-        repeat: Infinity,
-        ease: 'easeInOut',
-        delay,
-      }}
-      className={className}
-    >
-      {children}
-    </motion.div>
-  );
-}
+const FLOATING_IMAGES = [
+  {
+    src: 'https://images.unsplash.com/photo-1746458174990-25bf2f6a6103?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzB8MHwxfHNlYXJjaHwxfHxhdm9jYWRvJTIwaXNvbGF0ZWQlMjB3aGl0ZXxlbnwwfHx8fDE3NzYzMTQ2OTl8MA&ixlib=rb-4.1.0&q=85',
+    alt: 'Avocado',
+    className: 'absolute -top-8 -left-16 md:left-[-8%] w-28 md:w-44 animate-float-slow',
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1587334274535-5f82e7e55dc0?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzNDR8MHwxfHNlYXJjaHwxfHxjaGVycnklMjB0b21hdG9lcyUyMGlzb2xhdGVkJTIwd2hpdGV8ZW58MHx8fHwxNzc2MzE0Njk4fDA&ixlib=rb-4.1.0&q=85',
+    alt: 'Cherry Tomatoes',
+    className: 'absolute -top-4 -right-12 md:right-[-6%] w-24 md:w-36 animate-float-medium',
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1747292718361-c838a9968ec7?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2ODl8MHwxfHNlYXJjaHwxfHxoZWFsdGh5JTIwc2FsYWQlMjBib3dsJTIwdG9wJTIwdmlld3xlbnwwfHx8fDE3NzYzMTQ2OTh8MA&ixlib=rb-4.1.0&q=85',
+    alt: 'Salad Bowl',
+    className: 'absolute -bottom-8 left-1/2 -translate-x-1/2 w-48 md:w-72 animate-float-fast',
+  },
+];
 
 export function HeroSection() {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start start', 'end start'],
+  });
+  const yBg = useTransform(scrollYProgress, [0, 1], [0, 150]);
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden pt-16">
-      {/* Soft gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-brand-bg-soft via-background to-white -z-10" />
-      <div className="absolute top-20 right-0 w-[600px] h-[600px] rounded-full bg-brand-green/5 blur-3xl -z-10" />
-      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full bg-brand-amber/5 blur-3xl -z-10" />
+    <section
+      ref={ref}
+      className="relative min-h-screen flex items-center justify-center overflow-hidden pt-24 pb-12 grain-overlay"
+      style={{ backgroundColor: '#F9F8F6' }}
+    >
+      <div className="absolute top-20 left-10 w-72 h-72 rounded-full bg-[#1E3F20]/5 blur-3xl" />
+      <div className="absolute bottom-20 right-10 w-96 h-96 rounded-full bg-[#C05A45]/5 blur-3xl" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* Left - Text */}
-          <div className="flex flex-col gap-6 z-10">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-            >
-              <span className="inline-flex items-center gap-2 text-sm font-medium text-brand-green bg-brand-green/10 px-4 py-1.5 rounded-full">
-                AI-Powered Nutrition Tracking
-              </span>
-            </motion.div>
+      <motion.div style={{ y: yBg, opacity }} className="relative z-10 max-w-6xl mx-auto px-6 text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/50 backdrop-blur-md border border-[#E5E0D8] mb-8"
+        >
+          <span className="text-xs uppercase tracking-[0.2em] font-bold text-[#8A9A86]">
+            AI-Powered Nutrition & Meal Planning
+          </span>
+        </motion.div>
 
-            <motion.h1
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.1 }}
-              className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground leading-tight tracking-tight"
-            >
-              Track Every Bite.{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-green to-brand-green-dark">
-                Powered by AI.
-              </span>
-            </motion.h1>
+        <motion.h1
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.3 }}
+          className="font-heading text-5xl md:text-6xl lg:text-7xl tracking-tighter leading-[1.05] font-semibold text-[#1A241C] mb-6"
+        >
+          Plan. Cook. Track.
+          <br />
+          <span className="text-[#1E3F20]">All Powered by AI.</span>
+        </motion.h1>
 
-            <motion.p
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.2 }}
-              className="text-lg text-muted max-w-lg leading-relaxed"
-            >
-              Snap a photo of your meal and let AI do the rest. Accurate calorie counting,
-              macro tracking, and personalized insights to help you reach your goals.
-            </motion.p>
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.5 }}
+          className="text-base md:text-lg text-[#4A544C] leading-relaxed max-w-2xl mx-auto mb-10"
+        >
+          AI-generated recipes from global cuisines, smart meal planning with pantry sync,
+          and calorie tracking with photo scanning — everything your family needs in one place.
+        </motion.p>
 
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.3 }}
-              className="flex flex-wrap gap-4 mt-2"
-            >
-              <Link
-                href="/login"
-                className="inline-flex items-center gap-2 text-white bg-brand-green hover:bg-brand-green-dark transition-all px-7 py-3.5 rounded-full font-medium shadow-lg shadow-brand-green/20 hover:shadow-brand-green/30 hover:scale-[1.02]"
-              >
-                Get Started Free
-                <ArrowRight size={18} />
-              </Link>
-              <a
-                href="#how-it-works"
-                className="inline-flex items-center gap-2 text-foreground bg-white hover:bg-gray-50 transition-all px-7 py-3.5 rounded-full font-medium border border-border shadow-sm hover:scale-[1.02]"
-              >
-                <Play size={16} fill="currentColor" />
-                See How It Works
-              </a>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.5 }}
-              className="flex items-center gap-6 mt-4 text-sm text-muted"
-            >
-              <span className="flex items-center gap-1.5">
-                <span className="text-brand-amber">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
-                4.9/5 rating
-              </span>
-              <span className="w-px h-4 bg-border" />
-              <span>500K+ active users</span>
-              <span className="w-px h-4 bg-border hidden sm:block" />
-              <span className="hidden sm:block">Free to start</span>
-            </motion.div>
-          </div>
-
-          {/* Right - Floating Salad Bowl Image */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1, delay: 0.3 }}
-            className="relative h-[400px] sm:h-[500px] lg:h-[600px] flex items-center justify-center"
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.7 }}
+          className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12"
+        >
+          <Link
+            href="/dashboard"
+            className="group px-8 py-4 rounded-full bg-[#1E3F20] text-white font-semibold text-base hover:bg-[#2A522D] transition-all duration-300 hover:-translate-y-1 hover:shadow-xl flex items-center gap-2"
           >
-            {/* Main salad bowl - primary float */}
-            <FloatingElement duration={5} y={15} className="relative w-full h-full flex items-center justify-center">
-              <Image
-                src="/salad-bowl.png"
-                alt="Healthy salad bowl with fresh ingredients"
-                width={550}
-                height={550}
-                className="object-contain drop-shadow-2xl"
-                priority
-              />
-            </FloatingElement>
+            Get Started Free
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          </Link>
+          <a
+            href="#how-it-works"
+            className="px-8 py-4 rounded-full border border-[#E5E0D8] text-[#1A241C] font-semibold text-base hover:bg-white hover:shadow-md transition-all duration-300 hover:-translate-y-1"
+          >
+            See How It Works
+          </a>
+        </motion.div>
 
-          </motion.div>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.9 }}
+          className="flex items-center justify-center gap-6 text-sm text-[#4A544C]"
+        >
+          <div className="flex items-center gap-1">
+            {[...Array(5)].map((_, i) => (
+              <Star key={i} className="w-4 h-4 fill-[#D68C45] text-[#D68C45]" />
+            ))}
+            <span className="ml-1 font-semibold">4.9/5</span>
+          </div>
+          <span className="w-1 h-1 rounded-full bg-[#E5E0D8]" />
+          <span className="font-semibold">100K+ active users</span>
+          <span className="w-1 h-1 rounded-full bg-[#E5E0D8] hidden sm:block" />
+          <span className="font-semibold hidden sm:block">Free to start</span>
+        </motion.div>
+
+        <div className="relative mt-16 h-[280px] md:h-[350px] max-w-4xl mx-auto">
+          {FLOATING_IMAGES.map((img, i) => (
+            <motion.img
+              key={i}
+              src={img.src}
+              alt={img.alt}
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, delay: 1 + i * 0.2 }}
+              className={`${img.className} food-blend rounded-2xl object-cover`}
+              loading="eager"
+            />
+          ))}
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 }

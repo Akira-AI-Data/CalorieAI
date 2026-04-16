@@ -209,14 +209,14 @@ function RecipePicker({
               Pick from My Recipes
             </h2>
             <button onClick={onClose} className="p-2 hover:bg-background rounded-xl transition-colors">
-              <X className="w-5 h-5 text-muted-foreground" />
+              <X className="w-5 h-5 text-muted-foreground-foreground" />
             </button>
           </div>
           {mealType && (
-            <p className="text-xs text-muted-foreground mb-3 capitalize">Adding to: {mealType}</p>
+            <p className="text-xs text-muted-foreground-foreground mb-3 capitalize">Adding to: {mealType}</p>
           )}
           <div className="flex items-center gap-2 px-3 py-2 bg-background rounded-xl">
-            <Search className="w-4 h-4 text-muted-foreground" />
+            <Search className="w-4 h-4 text-muted-foreground-foreground" />
             <input
               type="text"
               value={search}
@@ -240,10 +240,10 @@ function RecipePicker({
                 <div className="min-w-0 flex-1">
                   <h3 className="font-medium text-foreground text-sm truncate">{recipe.name}</h3>
                   <div className="flex items-center gap-2 mt-0.5">
-                    <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                    <span className="flex items-center gap-1 text-xs text-muted-foreground-foreground">
                       <Globe className="w-3 h-3" /> {recipe.cuisine}
                     </span>
-                    <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                    <span className="flex items-center gap-1 text-xs text-muted-foreground-foreground">
                       <Clock className="w-3 h-3" /> {recipe.prepTime}
                     </span>
                   </div>
@@ -251,12 +251,12 @@ function RecipePicker({
               </button>
             ))
           ) : savedRecipes.length > 0 ? (
-            <div className="text-center py-8 text-muted-foreground">
+            <div className="text-center py-8 text-muted-foreground-foreground">
               <Search className="w-8 h-8 mx-auto mb-2 opacity-50" />
               <p className="text-sm">No recipes match your search</p>
             </div>
           ) : (
-            <div className="text-center py-8 text-muted-foreground">
+            <div className="text-center py-8 text-muted-foreground-foreground">
               <Bookmark className="w-8 h-8 mx-auto mb-2 opacity-50" />
               <p className="text-sm">No saved recipes yet</p>
               <p className="text-xs mt-1">Add recipes from the Cookbook first</p>
@@ -383,7 +383,7 @@ export default function MealPlanPage() {
         <div className="min-w-[700px]">
           {/* Day Headers */}
           <div className="grid grid-cols-8 gap-2 mb-2">
-            <div className="text-xs font-medium text-muted-foreground px-2 py-1" />
+            <div className="text-xs font-medium text-muted-foreground-foreground px-2 py-1" />
             {weekDates.map((date) => {
               const d = new Date(date + 'T00:00:00')
               const isToday = date === todayStr
@@ -391,7 +391,7 @@ export default function MealPlanPage() {
                 <div
                   key={date}
                   className={`text-center px-2 py-2 rounded-xl text-xs font-medium ${
-                    isToday ? 'bg-primary/10 text-foreground' : 'text-muted'
+                    isToday ? 'bg-primary/10 text-foreground' : 'text-muted-foreground'
                   }`}
                 >
                   <div className="font-semibold">{d.toLocaleDateString('en-US', { weekday: 'short' })}</div>
@@ -404,7 +404,7 @@ export default function MealPlanPage() {
           {/* Meal Rows */}
           {mealTypes.map((mealType) => (
             <div key={mealType} className="grid grid-cols-8 gap-2 mb-2">
-              <div className="flex items-center px-2 text-xs font-medium text-muted-foreground capitalize">
+              <div className="flex items-center px-2 text-xs font-medium text-muted-foreground-foreground capitalize">
                 {mealType}
               </div>
               {weekDates.map((date) => {
@@ -430,7 +430,7 @@ export default function MealPlanPage() {
                     ) : (
                       <button
                         onClick={() => handleSlotClick(date, mealType)}
-                        className="w-full h-full flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-lg transition-all"
+                        className="w-full h-full flex items-center justify-center text-muted-foreground-foreground hover:text-primary hover:bg-primary/10 rounded-lg transition-all"
                       >
                         <Plus className="w-5 h-5" />
                       </button>
