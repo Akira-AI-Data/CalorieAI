@@ -1,0 +1,418 @@
+'use client'
+
+import { useState, useEffect } from 'react'
+import { ShoppingCart, Plus, Trash2, Check, ArrowRight, RefreshCw, ShoppingBag, PackageOpen } from 'lucide-react'
+
+interface ShoppingItem {
+  id: string
+  name: string
+  qty: number
+  unit: string
+  checked: boolean
+  addedAt: string
+}
+
+interface PantryItem {
+  id: string
+  name: string
+  quantity: string
+  unit?: string
+  addedAt: string
+}
+
+interface MealPlanData {
+  [date: string]: {
+    [mealType: string]: { name: string; emoji?: string; cuisine?: string; prepTime?: string }
+  }
+}
+
+const SHOPPING_KEY = 'calorieai_shopping'
+const MEALPLAN_KEY = 'calorieai_mealplan'
+const PANTRY_KEY = 'calorieai_pantry'
+const SAVED_RECIPES_KEY = 'calorieai_saved_recipes'
+
+const UNITS = ['pcs', 'g', 'kg', 'ml', 'L', 'cups', 'tbsp', 'tsp', 'oz', 'lb']
+
+function loadShopping(): ShoppingItem[] {
+  try {
+    const raw = JSON.parse(localStorage.getItem(SHOPPING_KEY) || '[]')
+    // Migrate old format (quantity: string) → new format (qty: number, unit: string)
+    return raw.map((item: any) => ({
+      ...item,
+      qty: typeof item.qty === 'number' ? item.qty : (parseFloat(item.quantity) || 1),
+      unit: item.unit || 'pcs',
+    }))
+  } catch {
+    return []
+  }
+}
+
+function saveShopping(items: ShoppingItem[]) {
+  localStorage.setItem(SHOPPING_KEY, JSON.stringify(items))
+}
+
+function loadPantry(): PantryItem[] {
+  try { return JSON.parse(localStorage.getItem(PANTRY_KEY) || '[]') } catch { return [] }
+}
+
+function savePantry(items: PantryItem[]) {
+  localStorage.setItem(PANTRY_KEY, JSON.stringify(items))
+}
+
+function getWeekDates(): string[] {
+  const today = new Date()
+  const day = today.getDay()
+  const diff = today.getDate() - day + (day === 0 ? -6 : 1)
+  const monday = new Date(today)
+  monday.setDate(diff)
+  const dates: string[] = []
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(monday)
+    d.setDate(monday.getDate() + i)
+    dates.push(d.toISOString().split('T')[0])
+  }
+  return dates
+}
+
+function genId() {
+  return Date.now().toString() + Math.random().toString(36).slice(2, 8)
+}
+
+// Parse ingredient string like "200g rice noodles" or "2 cups flour" or "1/4 cup peanuts"
+function parseIngredient(raw: string): { qty: number; unit: string; name: string } {
+  const s = raw.trim()
+
+  // Pattern: number (optional space) unit (space) name
+  // Handles: "200g shrimp", "2 cups flour", "1/4 cup peanuts", "2 tbsp fish sauce", "1 lemon"
+  const match = s.match(/^([\d.\/]+)\s*(cups?|tbsp|tsp|oz|g|kg|ml|lb|L|bunch|cloves?|cans?|slices?|pieces?|stalks?)?\s*(.+)$/i)
+
+  if (match) {
+    let qty = 0
+    if (match[1].includes('/')) {
+      const parts = match[1].split('/')
+      qty = parseInt(parts[0]) / (parseInt(parts[1]) || 1)
+    } else {
+      qty = parseFloat(match[1])
+    }
+
+    const unitRaw = (match[2] || '').toLowerCase()
+    // Normalize plural units
+    const unitMap: Record<string, string> = {
+      cup: 'cups', cups: 'cups', tbsp: 'tbsp', tsp: 'tsp',
+      oz: 'oz', g: 'g', kg: 'kg', ml: 'ml', lb: 'lb', l: 'L',
+      bunch: 'pcs', clove: 'pcs', cloves: 'pcs', can: 'pcs', cans: 'pcs',
+      slice: 'pcs', slices: 'pcs', piece: 'pcs', pieces: 'pcs', stalk: 'pcs', stalks: 'pcs',
+    }
+    const unit = unitMap[unitRaw] || (unitRaw || 'pcs')
+    const name = match[3].trim()
+
+    return { qty: qty || 1, unit, name }
+  }
+
+  return { qty: 1, unit: 'pcs', name: s }
+}
+
+export default function ShoppingPage() {
+  const [items, setItems] = useState<ShoppingItem[]>([])
+  const [name, setName] = useState('')
+  const [qty, setQty] = useState('')
+  const [unit, setUnit] = useState('pcs')
+
+  useEffect(() => {
+    setItems(loadShopping())
+  }, [])
+
+  // Add or merge item — if same name+unit exists, sum quantities
+  function addOrMerge(itemName: string, itemQty: number, itemUnit: string): ShoppingItem[] {
+    const lower = itemName.toLowerCase().trim()
+    const existing = items.find(
+      (i) => i.name.toLowerCase().trim() === lower && i.unit === itemUnit && !i.checked
+    )
+    if (existing) {
+      return items.map((i) =>
+        i.id === existing.id ? { ...i, qty: i.qty + itemQty } : i
+      )
+    }
+    return [
+      {
+        id: genId(),
+        name: itemName.trim(),
+        qty: itemQty,
+        unit: itemUnit,
+        checked: false,
+        addedAt: new Date().toISOString(),
+      },
+      ...items,
+    ]
+  }
+
+  function handleAdd(e: React.FormEvent) {
+    e.preventDefault()
+    const trimmed = name.trim()
+    if (!trimmed) return
+    const q = parseFloat(qty) || 1
+    const updated = addOrMerge(trimmed, q, unit)
+    setItems(updated)
+    saveShopping(updated)
+    setName('')
+    setQty('')
+    setUnit('pcs')
+  }
+
+  function toggleItem(id: string) {
+    const updated = items.map((item) =>
+      item.id === id ? { ...item, checked: !item.checked } : item
+    )
+    setItems(updated)
+    saveShopping(updated)
+  }
+
+  function removeItem(id: string) {
+    const updated = items.filter((item) => item.id !== id)
+    setItems(updated)
+    saveShopping(updated)
+  }
+
+  function moveToPantry(item: ShoppingItem) {
+    const pantry = loadPantry()
+    if (!pantry.some((p) => p.name.toLowerCase() === item.name.toLowerCase())) {
+      pantry.unshift({
+        id: genId(),
+        name: item.name,
+        quantity: String(item.qty),
+        unit: item.unit,
+        addedAt: new Date().toISOString(),
+      })
+      savePantry(pantry)
+    }
+    const updated = items.filter((i) => i.id !== item.id)
+    setItems(updated)
+    saveShopping(updated)
+  }
+
+  function moveAllCheckedToPantry() {
+    const checkedItems = items.filter((i) => i.checked)
+    const pantry = loadPantry()
+    const existingNames = new Set(pantry.map((p) => p.name.toLowerCase()))
+
+    for (const item of checkedItems) {
+      if (!existingNames.has(item.name.toLowerCase())) {
+        pantry.unshift({
+          id: genId(),
+          name: item.name,
+          quantity: String(item.qty),
+          unit: item.unit,
+          addedAt: new Date().toISOString(),
+        })
+        existingNames.add(item.name.toLowerCase())
+      }
+    }
+    savePantry(pantry)
+    const updated = items.filter((i) => !i.checked)
+    setItems(updated)
+    saveShopping(updated)
+  }
+
+  function handleSync() {
+    try {
+      const mealPlan: MealPlanData = JSON.parse(localStorage.getItem(MEALPLAN_KEY) || '{}')
+      const savedRecipes = JSON.parse(localStorage.getItem(SAVED_RECIPES_KEY) || '[]')
+      const weekDates = getWeekDates()
+      const pantry = loadPantry()
+      const pantryNames = new Set(pantry.map((p) => p.name.toLowerCase()))
+      const existingNames = new Set(items.map((i) => i.name.toLowerCase()))
+
+      let updated = [...items]
+
+      for (const date of weekDates) {
+        const dayPlan = mealPlan[date]
+        if (!dayPlan) continue
+        for (const mealType of Object.keys(dayPlan)) {
+          const meal = dayPlan[mealType]
+          if (!meal?.name) continue
+          const recipe = savedRecipes.find((r: { name: string }) => r.name === meal.name)
+          if (!recipe?.ingredients) continue
+          for (const ing of recipe.ingredients as string[]) {
+            const parsed = parseIngredient(ing)
+            if (!parsed.name || pantryNames.has(parsed.name.toLowerCase())) continue
+
+            // Check if already in list — merge qty
+            const existingIdx = updated.findIndex(
+              (i) => i.name.toLowerCase() === parsed.name.toLowerCase() && i.unit === parsed.unit && !i.checked
+            )
+            if (existingIdx >= 0) {
+              updated[existingIdx] = { ...updated[existingIdx], qty: updated[existingIdx].qty + parsed.qty }
+            } else if (!existingNames.has(parsed.name.toLowerCase())) {
+              existingNames.add(parsed.name.toLowerCase())
+              updated.unshift({
+                id: genId(),
+                name: parsed.name,
+                qty: parsed.qty,
+                unit: parsed.unit,
+                checked: false,
+                addedAt: new Date().toISOString(),
+              })
+            }
+          }
+        }
+      }
+
+      setItems(updated)
+      saveShopping(updated)
+    } catch { /* ignore */ }
+  }
+
+  const unchecked = items.filter((i) => !i.checked)
+  const checked = items.filter((i) => i.checked)
+
+  return (
+    <div className="animate-in fade-in duration-300">
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
+          <ShoppingCart className="w-6 h-6 text-primary" />
+          Shopping List
+        </h1>
+        <button
+          onClick={handleSync}
+          className="flex items-center gap-2 px-4 py-2 bg-primary/10 text-primary rounded-xl font-medium text-sm hover:bg-primary/20 transition-colors"
+        >
+          <RefreshCw className="w-4 h-4" /> Sync from Meal Plan
+        </button>
+      </div>
+
+      {/* Add Form — Item + Qty + Unit */}
+      <form onSubmit={handleAdd} className="flex gap-2 mb-6">
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Item name..."
+          className="flex-1 px-4 py-3 rounded-xl border border-border focus:ring-2 focus:ring-primary focus:border-transparent outline-none text-sm"
+        />
+        <input
+          type="number"
+          value={qty}
+          onChange={(e) => setQty(e.target.value)}
+          placeholder="Qty"
+          min="0"
+          step="any"
+          className="w-20 px-3 py-3 rounded-xl border border-border focus:ring-2 focus:ring-primary focus:border-transparent outline-none text-sm text-center"
+        />
+        <select
+          value={unit}
+          onChange={(e) => setUnit(e.target.value)}
+          className="w-20 px-2 py-3 rounded-xl border border-border focus:ring-2 focus:ring-primary focus:border-transparent outline-none text-sm bg-card-bg"
+        >
+          {UNITS.map((u) => (
+            <option key={u} value={u}>{u}</option>
+          ))}
+        </select>
+        <button
+          type="submit"
+          disabled={!name.trim()}
+          className="px-4 py-3 bg-foreground text-white rounded-xl hover:bg-foreground/80 transition-colors flex items-center gap-1 disabled:opacity-40 disabled:cursor-not-allowed"
+        >
+          <Plus className="w-4 h-4" /> Add
+        </button>
+      </form>
+
+      {/* Table Header */}
+      {items.length > 0 && (
+        <div className="grid grid-cols-[1fr_80px_60px_auto] gap-2 px-4 py-2 text-xs font-semibold text-muted uppercase tracking-wide mb-1">
+          <span>Item</span>
+          <span className="text-center">Qty</span>
+          <span className="text-center">Unit</span>
+          <span />
+        </div>
+      )}
+
+      {items.length === 0 ? (
+        <div className="text-center py-16">
+          <ShoppingBag className="w-12 h-12 text-muted-foreground mx-auto mb-3" />
+          <p className="text-muted mb-2">Shopping list is empty!</p>
+          <p className="text-xs text-muted-foreground">Add items manually or sync from your meal plan</p>
+        </div>
+      ) : (
+        <>
+          {/* Unchecked Items */}
+          <div className="space-y-2 mb-6">
+            {unchecked.map((item) => (
+              <div
+                key={item.id}
+                className="grid grid-cols-[1fr_80px_60px_auto] gap-2 items-center bg-card-bg rounded-xl px-4 py-3 border border-border group"
+              >
+                <div className="flex items-center gap-3 min-w-0">
+                  <button
+                    onClick={() => toggleItem(item.id)}
+                    className="w-5 h-5 rounded-full border-2 border-border hover:border-primary transition-colors flex-shrink-0"
+                  />
+                  <span className="text-sm font-medium text-foreground truncate">{item.name}</span>
+                </div>
+                <span className="text-sm text-foreground text-center font-semibold">{item.qty}</span>
+                <span className="text-xs text-muted text-center">{item.unit}</span>
+                <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <button
+                    onClick={() => moveToPantry(item)}
+                    className="p-1.5 text-muted hover:text-primary hover:bg-primary/10 rounded-lg transition-all"
+                    title="Move to Pantry"
+                  >
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={() => removeItem(item.id)}
+                    className="p-1.5 text-muted-foreground hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Checked Items */}
+          {checked.length > 0 && (
+            <>
+              <div className="flex items-center justify-between mb-2">
+                <p className="text-xs font-medium text-muted uppercase tracking-wide">
+                  Purchased ({checked.length})
+                </p>
+                <button
+                  onClick={moveAllCheckedToPantry}
+                  className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-primary bg-primary/10 rounded-xl hover:bg-primary/20 transition-colors"
+                >
+                  <PackageOpen className="w-3.5 h-3.5" /> Move All to Pantry
+                </button>
+              </div>
+              <div className="space-y-2">
+                {checked.map((item) => (
+                  <div
+                    key={item.id}
+                    className="grid grid-cols-[1fr_80px_60px_auto] gap-2 items-center bg-background rounded-xl px-4 py-3 border border-border group"
+                  >
+                    <div className="flex items-center gap-3 min-w-0">
+                      <button
+                        onClick={() => toggleItem(item.id)}
+                        className="w-5 h-5 rounded-full bg-primary flex items-center justify-center flex-shrink-0"
+                      >
+                        <Check className="w-3 h-3 text-white" />
+                      </button>
+                      <span className="text-sm text-muted line-through truncate">{item.name}</span>
+                    </div>
+                    <span className="text-sm text-muted text-center">{item.qty}</span>
+                    <span className="text-xs text-muted text-center">{item.unit}</span>
+                    <button
+                      onClick={() => removeItem(item.id)}
+                      className="p-1.5 text-muted-foreground hover:text-red-500 rounded-lg transition-all opacity-0 group-hover:opacity-100"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
+        </>
+      )}
+    </div>
+  )
+}
