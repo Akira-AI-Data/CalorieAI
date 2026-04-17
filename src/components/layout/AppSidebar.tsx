@@ -17,7 +17,7 @@ import {
   ChevronsRight,
   ChevronDown,
   LogOut,
-  HelpCircle,
+  Sparkles,
   Menu,
   X,
 } from "lucide-react";
@@ -31,11 +31,11 @@ const menuItems = [
   { href: "/meal-plan", icon: CalendarDays, title: "Meal Plan" },
   { href: "/pantry", icon: Package, title: "Pantry" },
   { href: "/shopping", icon: ShoppingCart, title: "Shopping" },
+  { href: "/help", icon: Sparkles, title: "AI Advisor" },
 ];
 
 const accountItems = [
   { href: "/settings", icon: Settings, title: "Settings" },
-  { href: "/help", icon: HelpCircle, title: "Help & Support" },
 ];
 
 export function AppSidebar() {
