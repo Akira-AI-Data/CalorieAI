@@ -3,8 +3,10 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ShoppingCart, X } from 'lucide-react';
+import { useSession } from 'next-auth/react';
 import { AppSidebar } from './AppSidebar';
 import { useShoppingReminder } from '@/hooks/useShoppingReminder';
+import { resetIfFirstLogin } from '@/lib/firstLoginReset';
 
 function ShoppingReminderToast() {
   const [reminder, setReminder] = useState<{ count: number } | null>(null);
@@ -51,6 +53,10 @@ function ShoppingReminderToast() {
 }
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
+  const { data: session } = useSession();
+  useEffect(() => {
+    resetIfFirstLogin(session?.user?.id);
+  }, [session?.user?.id]);
   useShoppingReminder();
 
   return (

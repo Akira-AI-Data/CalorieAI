@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -158,7 +158,22 @@ function getNutrientStyle(pct: number) {
 export default function DashboardPage() {
   const [weekOffset, setWeekOffset] = useState(0);
   const { data: session } = useSession();
-  const firstName = session?.user?.name?.split(' ')[0] || session?.user?.email?.split('@')[0] || '';
+  const [profileName, setProfileName] = useState<string>('');
+  useEffect(() => {
+    fetch('/api/profile')
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.profile?.full_name) setProfileName(d.profile.full_name);
+      })
+      .catch(() => { /* keep fallback */ });
+  }, []);
+  const firstName =
+    profileName.split(' ')[0] ||
+    session?.user?.name?.split(' ')[0] ||
+    session?.user?.email?.split('@')[0] ||
+    '';
+  const hr = new Date().getHours();
+  const greeting = hr < 12 ? 'Good morning' : hr < 18 ? 'Good afternoon' : 'Good evening';
 
   const minW = Math.min(...weightData.map(d=>d.weight)) - 1;
   const maxW = Math.max(...weightData.map(d=>d.weight)) + 1;
@@ -187,7 +202,7 @@ export default function DashboardPage() {
             </div>
             <div className="flex-1 text-center sm:text-left space-y-3">
               <div>
-                <h1 className="text-2xl font-bold">Good afternoon{firstName ? `, ${firstName}` : ''}! 👋</h1>
+                <h1 className="text-2xl font-bold">{greeting}{firstName ? `, ${firstName}` : ''}! 👋</h1>
                 <p className="text-sm text-muted-foreground mt-1">
                   <span className="font-semibold text-primary">{consumed} cal</span> consumed ·{' '}
                   <span className="font-semibold text-foreground">{remaining} cal</span> remaining

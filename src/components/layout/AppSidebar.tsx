@@ -228,7 +228,7 @@ const Option = ({
 
 const Logo = () => {
   return (
-    <div className="grid size-10 shrink-0 place-content-center rounded-lg bg-gradient-to-br from-green-500 to-green-600 shadow-sm">
+    <div className="grid size-10 shrink-0 place-content-center rounded-lg bg-[#1E3F20] shadow-sm">
       <svg
         width="20"
         height="20"

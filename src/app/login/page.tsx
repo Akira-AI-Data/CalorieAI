@@ -69,7 +69,7 @@ export default function LoginPage() {
           <h1 className="text-2xl font-semibold text-foreground">
             {isSignUp ? 'Create your account' : 'Sign in to NourishSnap'}
           </h1>
-          <p className="text-muted text-sm mt-1">
+          <p className="text-muted-foreground text-sm mt-1">
             {isSignUp
               ? 'Start tracking your nutrition with AI'
               : 'Welcome back to smarter nutrition'}
@@ -108,7 +108,7 @@ export default function LoginPage() {
             <div className="w-full border-t border-border" />
           </div>
           <div className="relative flex justify-center text-xs">
-            <span className="bg-background px-3 text-muted">or continue with email</span>
+            <span className="bg-background px-3 text-muted-foreground">or continue with email</span>
           </div>
         </div>
 
@@ -116,7 +116,7 @@ export default function LoginPage() {
         <form onSubmit={handleSubmit} className="space-y-4">
           {isSignUp && (
             <div className="relative">
-              <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
+              <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <input
                 type="text"
                 value={name}
@@ -128,7 +128,7 @@ export default function LoginPage() {
           )}
 
           <div className="relative">
-            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
+            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <input
               type="email"
               value={email}
@@ -140,7 +140,7 @@ export default function LoginPage() {
           </div>
 
           <div className="relative">
-            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
+            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <input
               type="password"
               value={password}
@@ -161,7 +161,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-accent text-white rounded-xl text-sm font-medium hover:bg-accent-hover disabled:opacity-50 transition-colors"
+            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-primary text-white rounded-xl text-sm font-medium hover:bg-primary/90 disabled:opacity-50 transition-colors"
           >
             {loading ? (
               <Loader2 className="w-4 h-4 animate-spin" />
@@ -174,7 +174,7 @@ export default function LoginPage() {
         </form>
 
         {/* Toggle */}
-        <p className="text-center text-sm text-muted mt-6">
+        <p className="text-center text-sm text-muted-foreground mt-6">
           {isSignUp ? 'Already have an account?' : "Don't have an account?"}{' '}
           <button
             onClick={() => {
