@@ -377,16 +377,6 @@ export default function ShoppingPage() {
         </button>
       </form>
 
-      {/* Table Header */}
-      {items.length > 0 && (
-        <div className="grid grid-cols-[1fr_80px_60px_auto] gap-2 px-4 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">
-          <span>Item</span>
-          <span className="text-center">Qty</span>
-          <span className="text-center">Unit</span>
-          <span />
-        </div>
-      )}
-
       {items.length === 0 ? (
         <div className="text-center py-16">
           <ShoppingBag className="w-12 h-12 text-muted-foreground-foreground mx-auto mb-3" />
@@ -400,18 +390,19 @@ export default function ShoppingPage() {
             {unchecked.map((item) => (
               <div
                 key={item.id}
-                className="grid grid-cols-[1fr_80px_60px_auto] gap-2 items-center bg-card-bg rounded-xl px-4 py-3 border border-border group"
+                className="flex items-center justify-between gap-2 bg-card-bg rounded-xl px-4 py-3 border border-border group"
               >
-                <div className="flex items-center gap-3 min-w-0">
+                <div className="flex items-center gap-3 min-w-0 flex-1">
                   <button
                     onClick={() => toggleItem(item.id)}
                     className="w-5 h-5 rounded-full border-2 border-border hover:border-primary transition-colors flex-shrink-0"
                   />
-                  <span className="text-sm font-medium text-foreground truncate">{titleCase(item.name)}</span>
+                  <span className="text-sm font-medium text-foreground">{titleCase(item.name)}</span>
+                  <span className="text-xs text-muted-foreground whitespace-nowrap">
+                    {item.qty} {item.unit}
+                  </span>
                 </div>
-                <span className="text-sm text-foreground text-center font-semibold">{item.qty}</span>
-                <span className="text-xs text-muted-foreground text-center">{item.unit}</span>
-                <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="flex items-center gap-1 flex-shrink-0 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
                   <button
                     onClick={() => moveToPantry(item)}
                     className="p-1.5 text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-lg transition-all"
@@ -448,22 +439,23 @@ export default function ShoppingPage() {
                 {checked.map((item) => (
                   <div
                     key={item.id}
-                    className="grid grid-cols-[1fr_80px_60px_auto] gap-2 items-center bg-background rounded-xl px-4 py-3 border border-border group"
+                    className="flex items-center justify-between gap-2 bg-background rounded-xl px-4 py-3 border border-border group"
                   >
-                    <div className="flex items-center gap-3 min-w-0">
+                    <div className="flex items-center gap-3 min-w-0 flex-1">
                       <button
                         onClick={() => toggleItem(item.id)}
                         className="w-5 h-5 rounded-full bg-primary flex items-center justify-center flex-shrink-0"
                       >
                         <Check className="w-3 h-3 text-white" />
                       </button>
-                      <span className="text-sm text-muted-foreground line-through truncate">{titleCase(item.name)}</span>
+                      <span className="text-sm text-muted-foreground line-through">{titleCase(item.name)}</span>
+                      <span className="text-xs text-muted-foreground whitespace-nowrap">
+                        {item.qty} {item.unit}
+                      </span>
                     </div>
-                    <span className="text-sm text-muted-foreground text-center">{item.qty}</span>
-                    <span className="text-xs text-muted-foreground text-center">{item.unit}</span>
                     <button
                       onClick={() => removeItem(item.id)}
-                      className="p-1.5 text-muted-foreground-foreground hover:text-red-500 rounded-lg transition-all opacity-0 group-hover:opacity-100"
+                      className="p-1.5 text-muted-foreground-foreground hover:text-red-500 rounded-lg transition-all opacity-100 md:opacity-0 md:group-hover:opacity-100 flex-shrink-0"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
