@@ -32,6 +32,20 @@ function getHomeLocation(): { lat: number; lng: number } | null {
   }
 }
 
+async function getHomeLocationFromApi(): Promise<{ lat: number; lng: number } | null> {
+  try {
+    const res = await fetch('/api/profile');
+    if (!res.ok) return null;
+    const d = await res.json();
+    const lat = d.profile?.latitude;
+    const lng = d.profile?.longitude;
+    if (lat == null || lng == null) return null;
+    return { lat: Number(lat), lng: Number(lng) };
+  } catch {
+    return null;
+  }
+}
+
 function getUncheckedShoppingCount(): number {
   try {
     const items = JSON.parse(localStorage.getItem(SHOPPING_KEY) || '[]');
@@ -57,18 +71,33 @@ function markReminderSent() {
 export function useShoppingReminder() {
   const watchId = useRef<number | null>(null);
   const hasNotified = useRef(false);
+  const homeRef = useRef<{ lat: number; lng: number } | null>(null);
 
   const showNotification = useCallback((count: number) => {
     if (hasNotified.current) return;
     hasNotified.current = true;
     markReminderSent();
 
-    // Try browser Notification API
+    // Try browser Notification API (prefer service worker for mobile PWA)
     if ('Notification' in window && Notification.permission === 'granted') {
-      new Notification('Shopping Reminder', {
-        body: `You have ${count} item${count > 1 ? 's' : ''} on your shopping list. You're away from home — good time to shop!`,
-        icon: '/favicon.png',
-      });
+      const body = `You have ${count} item${count > 1 ? 's' : ''} on your shopping list. You're away from home — good time to shop!`;
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.ready
+          .then((reg) =>
+            reg.showNotification('Shopping Reminder', {
+              body,
+              icon: '/icons/icon-192x192.png',
+              badge: '/icons/icon-96x96.png',
+              tag: 'shopping-reminder',
+              data: { url: '/shopping' },
+            }),
+          )
+          .catch(() => {
+            new Notification('Shopping Reminder', { body, icon: '/favicon.png' });
+          });
+      } else {
+        new Notification('Shopping Reminder', { body, icon: '/favicon.png' });
+      }
     }
 
     // Also dispatch a custom event that any component can listen to
@@ -87,36 +116,60 @@ export function useShoppingReminder() {
       Notification.requestPermission();
     }
 
-    watchId.current = navigator.geolocation.watchPosition(
-      (pos) => {
-        const home = getHomeLocation();
-        if (!home) return;
+    let cancelled = false;
 
-        const distance = haversineKm(
-          home.lat,
-          home.lng,
-          pos.coords.latitude,
-          pos.coords.longitude
-        );
+    // Resolve home from localStorage first, then Supabase via /api/profile
+    (async () => {
+      homeRef.current = getHomeLocation();
+      if (!homeRef.current) {
+        const api = await getHomeLocationFromApi();
+        if (!cancelled && api) homeRef.current = api;
+      }
+    })();
 
-        if (distance >= MIN_DISTANCE_KM) {
-          const unchecked = getUncheckedShoppingCount();
-          if (unchecked > 0 && !isInCooldown()) {
-            showNotification(unchecked);
-          }
-        } else {
-          // Reset when user returns home
-          hasNotified.current = false;
+    const checkPosition = (pos: GeolocationPosition) => {
+      if (!homeRef.current) return;
+      const distance = haversineKm(
+        homeRef.current.lat,
+        homeRef.current.lng,
+        pos.coords.latitude,
+        pos.coords.longitude,
+      );
+
+      if (distance >= MIN_DISTANCE_KM) {
+        const unchecked = getUncheckedShoppingCount();
+        if (unchecked > 0 && !isInCooldown()) {
+          showNotification(unchecked);
         }
-      },
-      () => {}, // silently ignore errors
-      { enableHighAccuracy: false, maximumAge: 60000, timeout: 10000 }
+      } else {
+        hasNotified.current = false;
+      }
+    };
+
+    // Watch position continuously while app is open
+    watchId.current = navigator.geolocation.watchPosition(
+      checkPosition,
+      () => {},
+      { enableHighAccuracy: false, maximumAge: 60000, timeout: 10000 },
     );
 
+    // Also re-check on tab visibility (PWA resume from background)
+    const onVisible = () => {
+      if (document.visibilityState !== 'visible') return;
+      navigator.geolocation.getCurrentPosition(
+        checkPosition,
+        () => {},
+        { enableHighAccuracy: false, maximumAge: 60000, timeout: 10000 },
+      );
+    };
+    document.addEventListener('visibilitychange', onVisible);
+
     return () => {
+      cancelled = true;
       if (watchId.current !== null) {
         navigator.geolocation.clearWatch(watchId.current);
       }
+      document.removeEventListener('visibilitychange', onVisible);
     };
   }, [showNotification]);
 }

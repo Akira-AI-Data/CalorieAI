@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { ShoppingCart, Plus, Trash2, Check, ArrowRight, RefreshCw, ShoppingBag, PackageOpen, CheckCircle2 } from 'lucide-react'
+import { ReminderStatus } from '@/components/shopping/ReminderStatus'
 
 // Capitalise first letter of every word
 function titleCase(s: string): string {
@@ -340,6 +341,8 @@ export default function ShoppingPage() {
           <span className="text-sm font-medium">{toast}</span>
         </div>
       )}
+
+      <ReminderStatus />
 
       {/* Add Form — Item + Qty + Unit */}
       <form onSubmit={handleAdd} className="flex gap-2 mb-6">

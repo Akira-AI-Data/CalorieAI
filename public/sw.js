@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nourishsnap-v1';
+const CACHE_NAME = 'calorieai-v2';
 const STATIC_ASSETS = [
   '/',
   '/manifest.json',
@@ -20,6 +20,20 @@ self.addEventListener('activate', (event) => {
     )
   );
   self.clients.claim();
+});
+
+// Open /shopping when notification is tapped
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  const target = event.notification.data?.url || '/shopping';
+  event.waitUntil(
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clients) => {
+      for (const client of clients) {
+        if (client.url.includes(target) && 'focus' in client) return client.focus();
+      }
+      if (self.clients.openWindow) return self.clients.openWindow(target);
+    })
+  );
 });
 
 self.addEventListener('fetch', (event) => {
