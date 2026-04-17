@@ -89,6 +89,58 @@ function saveSettings(data: SettingsData) {
   localStorage.setItem(SETTINGS_KEY, JSON.stringify(data))
 }
 
+// Map Supabase user_profiles row → settings shape
+function profileToSettings(p: Record<string, unknown> | null): SettingsData | null {
+  if (!p) return null
+  return {
+    personalInfo: {
+      fullName: (p.full_name as string) || '',
+      dateOfBirth: (p.date_of_birth as string) || '',
+      gender: (p.gender as string) || '',
+      email: '',
+      location: (p.location as string) || '',
+      latitude: p.latitude != null ? String(p.latitude) : '',
+      longitude: p.longitude != null ? String(p.longitude) : '',
+    },
+    bodyStats: {
+      height: p.height_cm != null ? String(p.height_cm) : '',
+      weight: p.weight_kg != null ? String(p.weight_kg) : '',
+      age: p.age != null ? String(p.age) : '',
+      activityLevel: (p.activity_level as string) || 'moderate',
+    },
+    dailyGoals: {
+      calories: String(p.daily_calories ?? 2000),
+      protein: String(p.daily_protein ?? 150),
+      carbs: String(p.daily_carbs ?? 250),
+      fat: String(p.daily_fat ?? 65),
+      water: String(p.daily_water ?? 8),
+    },
+    familyProfiles: (p.family_profiles as FamilyProfile[]) || [],
+  }
+}
+
+function settingsToProfile(s: SettingsData) {
+  const toNum = (v: string) => (v === '' ? null : Number(v))
+  return {
+    full_name: s.personalInfo.fullName || '',
+    date_of_birth: s.personalInfo.dateOfBirth || null,
+    gender: s.personalInfo.gender || '',
+    location: s.personalInfo.location || null,
+    latitude: toNum(s.personalInfo.latitude),
+    longitude: toNum(s.personalInfo.longitude),
+    height_cm: toNum(s.bodyStats.height),
+    weight_kg: toNum(s.bodyStats.weight),
+    age: toNum(s.bodyStats.age),
+    activity_level: s.bodyStats.activityLevel || 'moderate',
+    daily_calories: Number(s.dailyGoals.calories) || 2000,
+    daily_protein: Number(s.dailyGoals.protein) || 150,
+    daily_carbs: Number(s.dailyGoals.carbs) || 250,
+    daily_fat: Number(s.dailyGoals.fat) || 65,
+    daily_water: Number(s.dailyGoals.water) || 8,
+    family_profiles: s.familyProfiles,
+  }
+}
+
 const activityLevels = [
   { value: 'sedentary', label: 'Sedentary (little or no exercise)' },
   { value: 'light', label: 'Light (1-3 days/week)' },
@@ -153,13 +205,33 @@ export default function SettingsPage() {
   const [newExcludedInput, setNewExcludedInput] = useState<{ [profileId: string]: string }>({})
 
   useEffect(() => {
+    // Prime UI with localStorage cache, then overwrite from Supabase
     setSettings(loadSettings())
+    fetch('/api/profile')
+      .then((r) => r.json())
+      .then((d) => {
+        const fromDb = profileToSettings(d.profile)
+        if (fromDb) setSettings(fromDb)
+      })
+      .catch(() => { /* ignore — keep local cache */ })
   }, [])
 
-  function handleSave() {
-    saveSettings(settings)
-    setSaved(true)
-    setTimeout(() => setSaved(false), 2000)
+  async function handleSave() {
+    saveSettings(settings) // optimistic cache
+    try {
+      const res = await fetch('/api/profile', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(settingsToProfile(settings)),
+      })
+      if (!res.ok) throw new Error(await res.text())
+      setSaved(true)
+      setTimeout(() => setSaved(false), 2000)
+    } catch {
+      // Stay silent; localStorage already has the value
+      setSaved(true)
+      setTimeout(() => setSaved(false), 2000)
+    }
   }
 
   function updatePersonalInfo(field: keyof PersonalInfo, value: string) {

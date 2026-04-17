@@ -47,7 +47,7 @@ export default function LoginPage() {
         return;
       }
 
-      window.location.href = '/chat';
+      window.location.href = '/dashboard';
     } catch {
       setError('Something went wrong. Please try again.');
       setLoading(false);
@@ -55,7 +55,7 @@ export default function LoginPage() {
   };
 
   const handleGoogleSignIn = () => {
-    signIn('google', { callbackUrl: '/chat' });
+    signIn('google', { callbackUrl: '/dashboard' });
   };
 
   return (

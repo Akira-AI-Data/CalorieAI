@@ -13,7 +13,7 @@ import {
   CalendarDays,
   Package,
   ShoppingCart,
-  Settings,
+  User as UserIcon,
   ChevronsRight,
   ChevronDown,
   LogOut,
@@ -35,7 +35,7 @@ const menuItems = [
 ];
 
 const accountItems = [
-  { href: "/settings", icon: Settings, title: "Settings" },
+  { href: "/settings", icon: UserIcon, title: "Profile" },
 ];
 
 export function AppSidebar() {
