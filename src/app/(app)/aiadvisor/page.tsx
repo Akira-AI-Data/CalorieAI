@@ -212,7 +212,7 @@ export default function HelpPage() {
           <Leaf className="w-5 h-5 text-primary" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold">Help & Support</h1>
+          <h1 className="text-2xl font-bold">AI Advisor</h1>
           <p className="text-sm text-muted-foreground">Health, fitness & nutrition assistant</p>
         </div>
       </div>

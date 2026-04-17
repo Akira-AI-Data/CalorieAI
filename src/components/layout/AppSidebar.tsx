@@ -31,7 +31,7 @@ const menuItems = [
   { href: "/meal-plan", icon: CalendarDays, title: "Meal Plan" },
   { href: "/pantry", icon: Package, title: "Pantry" },
   { href: "/shopping", icon: ShoppingCart, title: "Shopping" },
-  { href: "/help", icon: Sparkles, title: "AI Advisor" },
+  { href: "/aiadvisor", icon: Sparkles, title: "AI Advisor" },
 ];
 
 const accountItems = [
