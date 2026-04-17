@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
+import { FluentEmoji } from '@/components/ui/FluentEmoji';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   Accordion,
@@ -403,7 +404,7 @@ export default function DashboardPage() {
                   {foodGroups.map((g)=>(
                     <div key={g.label}>
                       <div className="flex items-center justify-between text-xs mb-1.5">
-                        <span className="flex items-center gap-1.5 font-medium text-foreground"><span>{g.emoji}</span>{g.label}</span>
+                        <span className="flex items-center gap-1.5 font-medium text-foreground"><FluentEmoji emoji={g.emoji} size={16} />{g.label}</span>
                         <div className="flex items-center gap-2">
                           <span className="text-muted-foreground">{g.types} {g.types===1?'type':'types'}</span>
                           <Badge variant="secondary" className="text-[10px] px-1.5 font-mono">{g.pct}%</Badge>

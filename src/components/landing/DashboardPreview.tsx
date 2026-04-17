@@ -3,6 +3,7 @@
 import { useRef, useState } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'motion/react';
 import { ScrollReveal } from './ScrollReveal';
+import { FluentEmoji } from '@/components/ui/FluentEmoji';
 
 const MEAL_PLAN = [
   { emoji: '🌅', meal: 'Berry Overnight Oats', type: 'Breakfast', cal: 350 },
@@ -91,7 +92,7 @@ export function DashboardPreview() {
                       className="flex items-center justify-between bg-[#F9F8F6] rounded-2xl px-4 py-3 hover:bg-[#EAE6DF] transition-colors cursor-default"
                     >
                       <div className="flex items-center gap-3">
-                        <span className="text-xl">{meal.emoji}</span>
+                        <FluentEmoji emoji={meal.emoji} size={24} />
                         <div>
                           <p className="text-sm font-medium text-[#1A241C]">{meal.meal}</p>
                           <p className="text-xs text-[#8A9A86]">{meal.type}</p>

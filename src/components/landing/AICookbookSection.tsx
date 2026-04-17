@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { motion } from 'motion/react';
 import { ScrollReveal } from './ScrollReveal';
 import { Clock, Globe } from 'lucide-react';
+import { FluentEmoji } from '@/components/ui/FluentEmoji';
 
 const RECIPES = [
   { emoji: '🥗', age: '18-25 years', title: 'Thai Green Curry Bowl', desc: 'Fragrant coconut curry with vegetables and jasmine rice', time: '20 mins', cuisine: 'Thai', color: '#3D7A42' },
@@ -38,7 +39,7 @@ export function AICookbookSection() {
                 className="bg-white rounded-3xl border border-[#E5E0D8] p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] cursor-pointer group"
               >
                 <div className="flex items-center justify-between mb-4">
-                  <span className="text-4xl">{recipe.emoji}</span>
+                  <FluentEmoji emoji={recipe.emoji} size={48} />
                   <span
                     className="text-xs font-semibold px-3 py-1 rounded-full"
                     style={{ color: recipe.color, backgroundColor: `${recipe.color}12` }}

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useMemo } from 'react'
 import { ChefHat, Globe, Carrot, Heart, Loader2, Clock, Bookmark, Shuffle, ChevronDown, X, Search, Zap, AlertTriangle, Sparkles } from 'lucide-react'
+import { FluentEmoji } from '@/components/ui/FluentEmoji'
 import {
   RECIPES,
   CUISINE_OPTIONS,
@@ -268,7 +269,7 @@ function RecipeDetailModal({
         <div className="p-6">
           <div className="flex items-start justify-between mb-4">
             <div className="flex items-center gap-3">
-              <span className="text-4xl">{recipe.emoji}</span>
+              <FluentEmoji emoji={recipe.emoji} size={48} />
               <div>
                 <h2 className="text-xl font-bold text-foreground">{recipe.name}</h2>
                 <div className="flex items-center gap-2 mt-1 text-xs text-muted-foreground">
@@ -520,7 +521,7 @@ export default function CookbookPage() {
                   onClick={() => setSelectedRecipe(recipe)}
                 >
                   <div className="flex items-start justify-between mb-2">
-                    <span className="text-3xl">{recipe.emoji}</span>
+                    <FluentEmoji emoji={recipe.emoji} size={36} />
                     <button
                       onClick={(e) => { e.stopPropagation(); if (!isSaved) handleSaveRecipe(recipe) }}
                       className={`p-1.5 rounded-lg transition-colors ${

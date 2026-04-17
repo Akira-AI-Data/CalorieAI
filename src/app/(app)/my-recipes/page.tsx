@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { Bookmark, Trash2, ChevronDown, ChevronUp, Search, Globe, Clock, CalendarDays, Plus, X } from 'lucide-react'
+import { FluentEmoji } from '@/components/ui/FluentEmoji'
 
 interface Recipe {
   name: string
@@ -246,7 +247,7 @@ export default function MyRecipesPage() {
                   onClick={() => setExpandedRecipe(isExpanded ? null : recipe.name)}
                 >
                   <div className="flex items-center gap-3 min-w-0">
-                    <span className="text-2xl flex-shrink-0">{recipe.emoji || '\ud83c\udf7d\ufe0f'}</span>
+                    <FluentEmoji emoji={recipe.emoji || '\ud83c\udf7d\ufe0f'} size={28} className="flex-shrink-0" />
                     <div className="min-w-0">
                       <h3 className="font-semibold text-foreground text-sm truncate">{recipe.name}</h3>
                       <div className="flex items-center gap-2 mt-0.5 flex-wrap">

@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import { CalendarDays, ChevronLeft, ChevronRight, Trash2, Plus, X, Search, Bookmark, Globe, Clock, ShoppingCart } from 'lucide-react'
+import { FluentEmoji } from '@/components/ui/FluentEmoji'
 
 interface MealEntry {
   name: string
@@ -236,7 +237,7 @@ function RecipePicker({
                 onClick={() => onSelect(recipe)}
                 className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-primary/10 transition-colors text-left"
               >
-                <span className="text-2xl flex-shrink-0">{recipe.emoji || '\ud83c\udf7d\ufe0f'}</span>
+                <FluentEmoji emoji={recipe.emoji || '\ud83c\udf7d\ufe0f'} size={28} className="flex-shrink-0" />
                 <div className="min-w-0 flex-1">
                   <h3 className="font-medium text-foreground text-sm truncate">{recipe.name}</h3>
                   <div className="flex items-center gap-2 mt-0.5">
