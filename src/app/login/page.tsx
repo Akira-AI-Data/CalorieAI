@@ -181,7 +181,7 @@ export default function LoginPage() {
               setIsSignUp(!isSignUp);
               setError('');
             }}
-            className="text-accent hover:underline font-medium"
+            className="text-primary hover:underline font-semibold"
           >
             {isSignUp ? 'Sign in' : 'Sign up'}
           </button>
