@@ -14,7 +14,7 @@ export function FooterSection() {
               Start your nutrition journey today
             </h2>
             <p className="text-base md:text-lg text-[#4A544C] leading-relaxed mb-10 max-w-xl mx-auto">
-              Join 100,000+ families who plan, cook, and track smarter with NourishSnap.
+              Join 100,000+ families who plan, cook, and track smarter with CalorieAI.
               Free to start, no credit card required.
             </p>
             <Link
@@ -36,7 +36,7 @@ export function FooterSection() {
                 <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center">
                   <Sparkles className="w-4 h-4 text-white" />
                 </div>
-                <span className="font-heading font-semibold text-lg">NourishSnap</span>
+                <span className="font-heading font-semibold text-lg">CalorieAI</span>
               </div>
               <p className="text-sm text-white/60 leading-relaxed">
                 AI-powered nutrition and meal planning for the whole family.
@@ -85,7 +85,7 @@ export function FooterSection() {
 
           <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-xs text-white/40">
-              &copy; 2026 NourishSnap. All rights reserved.
+              &copy; 2026 CalorieAI. All rights reserved.
             </p>
             <div className="flex items-center gap-6">
               {['Twitter', 'Instagram', 'LinkedIn'].map((social) => (

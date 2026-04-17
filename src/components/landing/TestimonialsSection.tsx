@@ -37,7 +37,7 @@ export function TestimonialsSection() {
               Loved by health-conscious people
             </h2>
             <p className="text-base md:text-lg text-[#4A544C] leading-relaxed mt-4 max-w-lg mx-auto">
-              Families and fitness enthusiasts love planning, cooking, and tracking with NourishSnap.
+              Families and fitness enthusiasts love planning, cooking, and tracking with CalorieAI.
             </p>
           </div>
         </ScrollReveal>

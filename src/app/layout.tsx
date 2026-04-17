@@ -8,8 +8,8 @@ const outfit = Outfit({ variable: '--font-outfit', subsets: ['latin'], display: 
 const manrope = Manrope({ variable: '--font-manrope', subsets: ['latin'], display: 'swap' });
 
 export const metadata: Metadata = {
-  title: 'NourishSnap',
-  description: 'NourishSnap - AI-powered calorie tracking. Snap, track, and thrive.',
+  title: 'CalorieAI',
+  description: 'CalorieAI - AI-powered calorie tracking. Snap, track, and thrive.',
   manifest: '/manifest.json',
   icons: {
     icon: '/favicon.png',
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
-    title: 'NourishSnap',
+    title: 'CalorieAI',
   },
 };
 

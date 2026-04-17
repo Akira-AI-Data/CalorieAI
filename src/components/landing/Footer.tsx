@@ -32,7 +32,7 @@ export function Footer() {
           <div className="md:col-span-2">
             <div className="flex items-center gap-2.5 mb-4">
               <Logo size={28} />
-              <span className="text-lg font-semibold">NourishSnap</span>
+              <span className="text-lg font-semibold">CalorieAI</span>
             </div>
             <p className="text-white/60 text-sm leading-relaxed max-w-xs">
               AI-powered calorie tracking that makes nutrition simple. Snap, track, and thrive with
@@ -62,7 +62,7 @@ export function Footer() {
 
         <div className="mt-12 pt-8 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-white/40 text-sm">
-            &copy; {new Date().getFullYear()} NourishSnap. All rights reserved.
+            &copy; {new Date().getFullYear()} CalorieAI. All rights reserved.
           </p>
           <div className="flex gap-6">
             {['Twitter', 'Instagram', 'LinkedIn'].map((social) => (

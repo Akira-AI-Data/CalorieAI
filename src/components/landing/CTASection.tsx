@@ -17,7 +17,7 @@ export function CTASection() {
             Start your nutrition journey today
           </h2>
           <p className="text-white/80 text-lg mt-4 max-w-2xl mx-auto">
-            Join 500,000+ people who track smarter with NourishSnap.
+            Join 500,000+ people who track smarter with CalorieAI.
             Free to start, no credit card required.
           </p>
           <div className="flex flex-wrap justify-center gap-4 mt-8">

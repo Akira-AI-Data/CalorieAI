@@ -55,7 +55,7 @@ export function FeaturesGrid() {
               Everything you need to track smarter
             </h2>
             <p className="text-muted mt-4 text-lg">
-              Powered by advanced AI, NourishSnap makes nutrition tracking effortless and accurate.
+              Powered by advanced AI, CalorieAI makes nutrition tracking effortless and accurate.
             </p>
           </div>
         </ScrollReveal>

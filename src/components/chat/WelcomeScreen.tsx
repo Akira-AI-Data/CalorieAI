@@ -27,7 +27,7 @@ export function WelcomeScreen({ onSuggestionClick }: WelcomeScreenProps) {
       </div>
 
       <h1 className="text-2xl font-semibold text-foreground mb-2">
-        What can NourishSnap do for you?
+        What can CalorieAI do for you?
       </h1>
 
       {/* Current plan indicator */}

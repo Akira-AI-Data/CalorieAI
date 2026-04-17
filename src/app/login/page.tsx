@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
-import { Leaf, Mail, Lock, User, Loader2 } from 'lucide-react';
+import { Sparkles, Mail, Lock, User, Loader2 } from 'lucide-react';
 
 export default function LoginPage() {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -63,11 +63,11 @@ export default function LoginPage() {
       <div className="w-full max-w-sm">
         {/* Logo */}
         <div className="flex flex-col items-center mb-8">
-          <div className="w-14 h-14 rounded-2xl bg-brand-green flex items-center justify-center mb-4">
-            <Leaf className="w-8 h-8 text-white" />
+          <div className="w-14 h-14 rounded-2xl bg-[#1E3F20] flex items-center justify-center mb-4">
+            <Sparkles className="w-7 h-7 text-white" />
           </div>
           <h1 className="text-2xl font-semibold text-foreground">
-            {isSignUp ? 'Create your account' : 'Sign in to NourishSnap'}
+            {isSignUp ? 'Create your account' : 'Sign in to CalorieAI'}
           </h1>
           <p className="text-muted-foreground text-sm mt-1">
             {isSignUp

@@ -48,7 +48,7 @@ export function NutritionIntelligence() {
               Know your nutrition inside out
             </h2>
             <p className="text-base md:text-lg text-[#4A544C] leading-relaxed mt-4 max-w-2xl mx-auto">
-              Go beyond calorie counting. NourishSnap scores your overall nutrition, tracks food group balance,
+              Go beyond calorie counting. CalorieAI scores your overall nutrition, tracks food group balance,
               highlights nutrient gaps, and gives personalized AI recommendations.
             </p>
           </div>

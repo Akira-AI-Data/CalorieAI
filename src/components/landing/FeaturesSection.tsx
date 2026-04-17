@@ -143,7 +143,7 @@ export function FeaturesSection() {
             Everything you need to eat smarter
           </h2>
           <p className="text-[#4A544C] mt-4 text-base md:text-lg leading-relaxed">
-            Powered by advanced AI, NourishSnap makes nutrition tracking, meal planning,
+            Powered by advanced AI, CalorieAI makes nutrition tracking, meal planning,
             and recipe discovery effortless, accurate, and genuinely enjoyable.
           </p>
         </div>

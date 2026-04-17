@@ -229,27 +229,7 @@ const Option = ({
 const Logo = () => {
   return (
     <div className="grid size-10 shrink-0 place-content-center rounded-lg bg-[#1E3F20] shadow-sm">
-      <svg
-        width="20"
-        height="20"
-        viewBox="0 0 48 48"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M24 10 C24 10 36 16 36 28 C36 34 30 38 24 38 C18 38 12 34 12 28 C12 16 24 10 24 10Z"
-          fill="white"
-          opacity="0.3"
-        />
-        <path
-          d="M18 25 L22 29 L30 20"
-          stroke="white"
-          strokeWidth="3"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          fill="none"
-        />
-      </svg>
+      <Sparkles className="w-5 h-5 text-white" />
     </div>
   );
 };
