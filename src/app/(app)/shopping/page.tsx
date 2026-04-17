@@ -1,7 +1,12 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { ShoppingCart, Plus, Trash2, Check, ArrowRight, RefreshCw, ShoppingBag, PackageOpen } from 'lucide-react'
+import { ShoppingCart, Plus, Trash2, Check, ArrowRight, RefreshCw, ShoppingBag, PackageOpen, CheckCircle2 } from 'lucide-react'
+
+// Capitalise first letter of every word
+function titleCase(s: string): string {
+  return s.replace(/\b\w/g, (c) => c.toUpperCase())
+}
 
 interface ShoppingItem {
   id: string
@@ -85,7 +90,8 @@ function parseIngredient(raw: string): { qty: number; unit: string; name: string
 
   // Pattern: number (optional space) unit (space) name
   // Handles: "200g shrimp", "2 cups flour", "1/4 cup peanuts", "2 tbsp fish sauce", "1 lemon"
-  const match = s.match(/^([\d.\/]+)\s*(cups?|tbsp|tsp|oz|g|kg|ml|lb|L|bunch|cloves?|cans?|slices?|pieces?|stalks?)?\s*(.+)$/i)
+  // Unit must be followed by whitespace (or end) so "1 lemon" doesn't match "l" as unit
+  const match = s.match(/^([\d.\/]+)(?:\s*(cups?|tbsp|tsp|oz|g|kg|ml|lb|L|bunch|cloves?|cans?|slices?|pieces?|stalks?)(?=\s|$))?\s*(.+)$/i)
 
   if (match) {
     let qty = 0
@@ -118,6 +124,20 @@ export default function ShoppingPage() {
   const [name, setName] = useState('')
   const [qty, setQty] = useState('')
   const [unit, setUnit] = useState('pcs')
+  const [toast, setToast] = useState<string | null>(null)
+
+  function showToast(msg: string) {
+    setToast(msg)
+    setTimeout(() => setToast(null), 2500)
+  }
+
+  function handleClearAll() {
+    if (items.length === 0) return
+    if (!confirm('Clear all shopping list items? This cannot be undone.')) return
+    setItems([])
+    saveShopping([])
+    showToast('Shopping list cleared')
+  }
 
   useEffect(() => {
     setItems(loadShopping())
@@ -276,7 +296,14 @@ export default function ShoppingPage() {
 
       setItems(updated)
       saveShopping(updated)
-    } catch { /* ignore */ }
+      if (required.size === 0) {
+        showToast('No ingredients to sync — meal plan is empty')
+      } else {
+        showToast(`Synced ${required.size} ingredient${required.size === 1 ? '' : 's'} from meal plan`)
+      }
+    } catch {
+      showToast('Sync failed — try again')
+    }
   }
 
   const unchecked = items.filter((i) => !i.checked)
@@ -289,13 +316,30 @@ export default function ShoppingPage() {
           <ShoppingCart className="w-6 h-6 text-primary" />
           Shopping List
         </h1>
-        <button
-          onClick={handleSync}
-          className="flex items-center gap-2 px-4 py-2 bg-primary/10 text-primary rounded-xl font-medium text-sm hover:bg-primary/20 transition-colors"
-        >
-          <RefreshCw className="w-4 h-4" /> Sync from Meal Plan
-        </button>
+        <div className="flex items-center gap-2">
+          {items.length > 0 && (
+            <button
+              onClick={handleClearAll}
+              className="flex items-center gap-2 px-4 py-2 bg-muted text-foreground rounded-xl font-medium text-sm hover:bg-muted/80 transition-colors"
+            >
+              <Trash2 className="w-4 h-4" /> Clear All
+            </button>
+          )}
+          <button
+            onClick={handleSync}
+            className="flex items-center gap-2 px-4 py-2 bg-primary/10 text-primary rounded-xl font-medium text-sm hover:bg-primary/20 transition-colors"
+          >
+            <RefreshCw className="w-4 h-4" /> Sync from Meal Plan
+          </button>
+        </div>
       </div>
+
+      {toast && (
+        <div className="fixed top-6 right-6 z-50 flex items-center gap-2 px-4 py-3 bg-primary text-white rounded-xl shadow-lg animate-in fade-in slide-in-from-top-2 duration-300">
+          <CheckCircle2 className="w-5 h-5" />
+          <span className="text-sm font-medium">{toast}</span>
+        </div>
+      )}
 
       {/* Add Form — Item + Qty + Unit */}
       <form onSubmit={handleAdd} className="flex gap-2 mb-6">
@@ -363,7 +407,7 @@ export default function ShoppingPage() {
                     onClick={() => toggleItem(item.id)}
                     className="w-5 h-5 rounded-full border-2 border-border hover:border-primary transition-colors flex-shrink-0"
                   />
-                  <span className="text-sm font-medium text-foreground truncate">{item.name}</span>
+                  <span className="text-sm font-medium text-foreground truncate">{titleCase(item.name)}</span>
                 </div>
                 <span className="text-sm text-foreground text-center font-semibold">{item.qty}</span>
                 <span className="text-xs text-muted-foreground text-center">{item.unit}</span>
@@ -413,7 +457,7 @@ export default function ShoppingPage() {
                       >
                         <Check className="w-3 h-3 text-white" />
                       </button>
-                      <span className="text-sm text-muted-foreground line-through truncate">{item.name}</span>
+                      <span className="text-sm text-muted-foreground line-through truncate">{titleCase(item.name)}</span>
                     </div>
                     <span className="text-sm text-muted-foreground text-center">{item.qty}</span>
                     <span className="text-xs text-muted-foreground text-center">{item.unit}</span>
