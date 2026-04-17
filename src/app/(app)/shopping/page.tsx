@@ -10,6 +10,7 @@ interface ShoppingItem {
   unit: string
   checked: boolean
   addedAt: string
+  source?: 'manual' | 'meal-plan'
 }
 
 interface PantryItem {
@@ -141,6 +142,7 @@ export default function ShoppingPage() {
         unit: itemUnit,
         checked: false,
         addedAt: new Date().toISOString(),
+        source: 'manual',
       },
       ...items,
     ]
@@ -220,10 +222,9 @@ export default function ShoppingPage() {
       const weekDates = getWeekDates()
       const pantry = loadPantry()
       const pantryNames = new Set(pantry.map((p) => p.name.toLowerCase()))
-      const existingNames = new Set(items.map((i) => i.name.toLowerCase()))
 
-      let updated = [...items]
-
+      // 1. Aggregate required qty per (name|unit) from meal plan
+      const required = new Map<string, { name: string; qty: number; unit: string }>()
       for (const date of weekDates) {
         const dayPlan = mealPlan[date]
         if (!dayPlan) continue
@@ -235,25 +236,41 @@ export default function ShoppingPage() {
           for (const ing of recipe.ingredients as string[]) {
             const parsed = parseIngredient(ing)
             if (!parsed.name || pantryNames.has(parsed.name.toLowerCase())) continue
-
-            // Check if already in list — merge qty
-            const existingIdx = updated.findIndex(
-              (i) => i.name.toLowerCase() === parsed.name.toLowerCase() && i.unit === parsed.unit && !i.checked
-            )
-            if (existingIdx >= 0) {
-              updated[existingIdx] = { ...updated[existingIdx], qty: updated[existingIdx].qty + parsed.qty }
-            } else if (!existingNames.has(parsed.name.toLowerCase())) {
-              existingNames.add(parsed.name.toLowerCase())
-              updated.unshift({
-                id: genId(),
-                name: parsed.name,
-                qty: parsed.qty,
-                unit: parsed.unit,
-                checked: false,
-                addedAt: new Date().toISOString(),
-              })
-            }
+            const key = `${parsed.name.toLowerCase()}|${parsed.unit}`
+            const prev = required.get(key)
+            if (prev) prev.qty += parsed.qty
+            else required.set(key, { name: parsed.name, qty: parsed.qty, unit: parsed.unit })
           }
+        }
+      }
+
+      // 2. Upsert: SET (not add) qty for meal-plan items; insert new; leave manual items alone
+      const updated = [...items]
+      for (const [key, req] of required) {
+        const idx = updated.findIndex(
+          (i) =>
+            !i.checked &&
+            i.source === 'meal-plan' &&
+            i.name.toLowerCase() === req.name.toLowerCase() &&
+            i.unit === req.unit,
+        )
+        if (idx >= 0) {
+          updated[idx] = { ...updated[idx], qty: req.qty }
+        } else {
+          // Skip insert if user already has manual entry for same name (any unit)
+          const hasManual = updated.some(
+            (i) => !i.checked && i.source !== 'meal-plan' && i.name.toLowerCase() === req.name.toLowerCase(),
+          )
+          if (hasManual) continue
+          updated.unshift({
+            id: genId(),
+            name: req.name,
+            qty: req.qty,
+            unit: req.unit,
+            checked: false,
+            addedAt: new Date().toISOString(),
+            source: 'meal-plan',
+          })
         }
       }
 
