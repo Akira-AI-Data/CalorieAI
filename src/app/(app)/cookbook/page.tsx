@@ -44,8 +44,8 @@ const NUTRIENT_FOOD_MAP: Record<string, string[]> = {
 
 function detectNutrientGaps(): { nutrient: string; score: number; foods: string[] }[] {
   try {
-    const mealPlan = JSON.parse(localStorage.getItem('calorieai_mealplan') || '{}')
-    const savedRecipes: Recipe[] = JSON.parse(localStorage.getItem('calorieai_saved_recipes') || '[]')
+    const mealPlan = JSON.parse(localStorage.getItem('posha_mealplan') || '{}')
+    const savedRecipes: Recipe[] = JSON.parse(localStorage.getItem('posha_saved_recipes') || '[]')
 
     // Collect all ingredients from recent meals
     const allIngredients: string[] = []
@@ -82,7 +82,7 @@ function detectNutrientGaps(): { nutrient: string; score: number; foods: string[
   }
 }
 
-const SAVED_RECIPES_KEY = 'calorieai_saved_recipes'
+const SAVED_RECIPES_KEY = 'posha_saved_recipes'
 const categories = ['breakfast', 'lunch', 'dinner', 'snack']
 
 function saveRecipeToStorage(recipe: Recipe) {

@@ -43,7 +43,7 @@ interface SettingsData {
   familyProfiles: FamilyProfile[]
 }
 
-const SETTINGS_KEY = 'calorieai_settings'
+const SETTINGS_KEY = 'posha_settings'
 
 const defaultSettings: SettingsData = {
   personalInfo: {

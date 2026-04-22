@@ -1,4 +1,4 @@
-import { isToday, isYesterday, subDays, isAfter } from 'date-fns';
+import { differenceInCalendarDays, isToday, isYesterday } from 'date-fns';
 import { Conversation } from '@/types';
 
 export type DateGroup = 'Today' | 'Yesterday' | 'Last 7 Days' | 'Last 30 Days' | 'Older';
@@ -8,22 +8,21 @@ export function groupConversationsByDate(
 ): Map<DateGroup, Conversation[]> {
   const groups = new Map<DateGroup, Conversation[]>();
   const now = new Date();
-  const sevenDaysAgo = subDays(now, 7);
-  const thirtyDaysAgo = subDays(now, 30);
 
   const sorted = [...conversations].sort((a, b) => b.updatedAt - a.updatedAt);
 
   for (const conv of sorted) {
     const date = new Date(conv.updatedAt);
     let group: DateGroup;
+    const daysAgo = differenceInCalendarDays(now, date);
 
     if (isToday(date)) {
       group = 'Today';
     } else if (isYesterday(date)) {
       group = 'Yesterday';
-    } else if (isAfter(date, sevenDaysAgo)) {
+    } else if (daysAgo <= 7) {
       group = 'Last 7 Days';
-    } else if (isAfter(date, thirtyDaysAgo)) {
+    } else if (daysAgo <= 30) {
       group = 'Last 30 Days';
     } else {
       group = 'Older';

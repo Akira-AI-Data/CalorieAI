@@ -27,7 +27,7 @@ export function WelcomeScreen({ onSuggestionClick }: WelcomeScreenProps) {
       </div>
 
       <h1 className="text-2xl font-semibold text-foreground mb-2">
-        What can CalorieAI do for you?
+        What can Posha do for you?
       </h1>
 
       {/* Current plan indicator */}

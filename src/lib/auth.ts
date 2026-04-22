@@ -5,6 +5,7 @@ import bcrypt from 'bcryptjs';
 import { createServerSupabaseClient } from './supabase';
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+  trustHost: true,
   session: {
     strategy: 'jwt',
   },
@@ -51,6 +52,23 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }),
   ],
   callbacks: {
+    async redirect({ url, baseUrl }) {
+      if (url.startsWith('/')) {
+        return `${baseUrl}${url}`;
+      }
+
+      try {
+        const targetUrl = new URL(url);
+        const currentBaseUrl = new URL(baseUrl);
+        if (targetUrl.origin === currentBaseUrl.origin) {
+          return url;
+        }
+      } catch {
+        // Fall through to the safe default below.
+      }
+
+      return `${baseUrl}/dashboard`;
+    },
     async signIn({ user, account }) {
       if (account?.provider === 'google') {
         const supabase = createServerSupabaseClient();

@@ -2,15 +2,15 @@
 // Called from the (app) layout on mount — wipes app localStorage so a new
 // account starts with a clean slate on this device.
 
-const FLAG_KEY = 'calorieai_first_login_done'
+const FLAG_KEY = 'posha_first_login_done'
 
 const APP_DATA_KEYS = [
-  'calorieai_mealplan',
-  'calorieai_saved_recipes',
-  'calorieai_pantry',
-  'calorieai_shopping',
-  'calorieai_shopping_reminder_last',
-  'calorieai_settings',
+  'posha_mealplan',
+  'posha_saved_recipes',
+  'posha_pantry',
+  'posha_shopping',
+  'posha_shopping_reminder_last',
+  'posha_settings',
 ]
 
 export function resetIfFirstLogin(userId: string | undefined | null) {

@@ -4,6 +4,17 @@ import { NextResponse } from 'next/server';
 export default auth((req) => {
   const isLoggedIn = !!req.auth;
   const { pathname } = req.nextUrl;
+  const host = req.nextUrl.hostname;
+
+  if (
+    host === 'myposha.com' ||
+    host === 'calorieai-omega.vercel.app'
+  ) {
+    const redirectUrl = req.nextUrl.clone();
+    redirectUrl.hostname = 'www.myposha.com';
+    redirectUrl.protocol = 'https:';
+    return NextResponse.redirect(redirectUrl, 308);
+  }
 
   // Allow auth API routes
   if (pathname.startsWith('/api/auth')) {
@@ -24,11 +35,6 @@ export default auth((req) => {
   // Public pages accessible to everyone
   const publicPages = ['/', '/pricing', '/login'];
   const isPublicPage = publicPages.includes(pathname);
-
-  // Redirect logged-in users from landing/login to dashboard
-  if ((pathname === '/login' || pathname === '/') && isLoggedIn) {
-    return NextResponse.redirect(new URL('/dashboard', req.url));
-  }
 
   // Allow public pages
   if (isPublicPage) {

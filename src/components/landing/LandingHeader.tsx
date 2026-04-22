@@ -39,7 +39,7 @@ export function LandingHeader() {
             <Sparkles className="w-5 h-5 text-white" />
           </div>
           <span className="font-heading font-semibold text-xl text-[#1A241C] tracking-tight">
-            CalorieAI
+            Posha
           </span>
         </Link>
 

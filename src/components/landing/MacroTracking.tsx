@@ -19,7 +19,7 @@ const sections = [
   {
     title: 'AI-powered meal suggestions',
     description:
-      'Based on your remaining macros and preferences, CalorieAI recommends meals to perfectly balance your day. Never guess what to eat next.',
+      'Based on your remaining macros and preferences, Posha recommends meals to perfectly balance your day. Never guess what to eat next.',
     points: [
       'Personalized recommendations',
       'Adapts to dietary restrictions',

@@ -33,7 +33,7 @@ export function Navbar() {
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2.5">
           <Logo size={32} />
-          <span className="text-lg font-semibold text-foreground">CalorieAI</span>
+          <span className="text-lg font-semibold text-foreground">Posha</span>
         </Link>
 
         {/* Desktop links */}

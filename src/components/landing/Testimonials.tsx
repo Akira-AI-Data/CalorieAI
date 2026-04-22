@@ -8,7 +8,7 @@ const testimonials = [
     role: 'Fitness Enthusiast',
     avatar: 'S',
     avatarBg: 'bg-green-100 text-green-700',
-    quote: 'CalorieAI completely changed how I think about food. The photo scanning is incredibly accurate and saves me so much time every day.',
+    quote: 'Posha completely changed how I think about food. The photo scanning is incredibly accurate and saves me so much time every day.',
     rating: 5,
   },
   {
@@ -24,7 +24,7 @@ const testimonials = [
     role: 'Nutritionist',
     avatar: 'E',
     avatarBg: 'bg-blue-100 text-blue-700',
-    quote: 'I recommend CalorieAI to all my clients. The accuracy of the AI recognition and the comprehensive food database are genuinely impressive.',
+    quote: 'I recommend Posha to all my clients. The accuracy of the AI recognition and the comprehensive food database are genuinely impressive.',
     rating: 5,
   },
 ];
@@ -42,7 +42,7 @@ export function Testimonials() {
               Loved by health-conscious people
             </h2>
             <p className="text-muted mt-4 text-lg">
-              Join thousands who&apos;ve transformed their nutrition habits with CalorieAI.
+              Join thousands who&apos;ve transformed their nutrition habits with Posha.
             </p>
           </div>
         </ScrollReveal>

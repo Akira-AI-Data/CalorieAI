@@ -65,7 +65,7 @@ const RULES: Rule[] = [
   // Calorie deficit / surplus
   {
     patterns: ['caloric deficit','calorie deficit','deficit'],
-    answer: `A calorie deficit means eating fewer calories than your body burns.\n\n• **Mild deficit (250–300 kcal/day)** → ~0.25 kg/week loss, easier to maintain\n• **Moderate deficit (500 kcal/day)** → ~0.5 kg/week, the most common recommendation\n• **Large deficit (>750 kcal/day)** → faster loss but high risk of muscle loss, fatigue, and diet failure\n\nFind your TDEE (Total Daily Energy Expenditure) first — it's roughly your bodyweight (kg) × 30–35 for a moderately active person. Then subtract to create your deficit.\n\nLog meals daily in CalorieAI to stay on track.`,
+    answer: `A calorie deficit means eating fewer calories than your body burns.\n\n• **Mild deficit (250–300 kcal/day)** → ~0.25 kg/week loss, easier to maintain\n• **Moderate deficit (500 kcal/day)** → ~0.5 kg/week, the most common recommendation\n• **Large deficit (>750 kcal/day)** → faster loss but high risk of muscle loss, fatigue, and diet failure\n\nFind your TDEE (Total Daily Energy Expenditure) first — it's roughly your bodyweight (kg) × 30–35 for a moderately active person. Then subtract to create your deficit.\n\nLog meals daily in Posha to stay on track.`,
   },
   {
     patterns: ['tdee','bmr','maintenance calories','how many calories do i need','how many calories should i eat','daily calories'],
@@ -145,15 +145,15 @@ function getAnswer(text: string): string {
   }
   if (bestRule && bestScore > 0) return bestRule.answer;
   // Generic fallback for health-related but unmatched
-  return `That's a great health and fitness question! Here's some general guidance:\n\nCalorieAI focuses on nutrition, fitness, and wellness. For your specific question, the key principles are:\n• Eat whole, minimally processed foods\n• Hit your protein target (1.6–2g/kg bodyweight)\n• Stay active — 150 min/week of moderate exercise\n• Sleep 7–9 hours and manage stress\n• Be consistent over weeks and months\n\nCould you ask a more specific question? For example: "How do I lose weight?", "What should I eat before a workout?", or "How much protein do I need?" — I'll give you a detailed, personalised answer! 🌿`;
+  return `That's a great health and fitness question! Here's some general guidance:\n\nPosha focuses on nutrition, fitness, and wellness. For your specific question, the key principles are:\n• Eat whole, minimally processed foods\n• Hit your protein target (1.6–2g/kg bodyweight)\n• Stay active — 150 min/week of moderate exercise\n• Sleep 7–9 hours and manage stress\n• Be consistent over weeks and months\n\nCould you ask a more specific question? For example: "How do I lose weight?", "What should I eat before a workout?", or "How much protein do I need?" — I'll give you a detailed, personalised answer! 🌿`;
 }
 
-const DEFAULT_REPLY = "I'm your CalorieAI health and fitness assistant — I can help with nutrition, weight management, exercise, sleep, and general wellness.\n\nFor questions outside health and fitness (tech issues, billing, account problems), contact us at support@nourishsnap.app.";
+const DEFAULT_REPLY = "I'm your Posha health and fitness assistant — I can help with nutrition, weight management, exercise, sleep, and general wellness.\n\nFor questions outside health and fitness (tech issues, billing, account problems), contact us at support@posha.app.";
 
 const WELCOME: Message = {
   id: 'welcome',
   role: 'assistant',
-  content: "Hi! I'm your CalorieAI health assistant 🌿\n\nAsk me anything about nutrition, weight loss, fitness, exercise, sleep, or healthy habits — I'm here to help you reach your goals!",
+  content: "Hi! I'm your Posha health assistant 🌿\n\nAsk me anything about nutrition, weight loss, fitness, exercise, sleep, or healthy habits — I'm here to help you reach your goals!",
 };
 
 const SUGGESTED = [

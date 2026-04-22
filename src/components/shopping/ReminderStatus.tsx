@@ -29,7 +29,7 @@ export function ReminderStatus() {
       } catch {}
       if (!home) {
         try {
-          const s = JSON.parse(localStorage.getItem('calorieai_settings') || '{}')
+          const s = JSON.parse(localStorage.getItem('posha_settings') || '{}')
           const lat = parseFloat(s?.personalInfo?.latitude)
           const lng = parseFloat(s?.personalInfo?.longitude)
           if (!isNaN(lat) && !isNaN(lng)) home = { lat, lng }

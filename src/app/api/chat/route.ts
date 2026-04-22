@@ -2,10 +2,6 @@ import Anthropic from '@anthropic-ai/sdk';
 import { NextRequest } from 'next/server';
 import { auth } from '@/lib/auth';
 
-const anthropic = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
-});
-
 export async function POST(req: NextRequest) {
   try {
     const session = await auth();
@@ -18,6 +14,16 @@ export async function POST(req: NextRequest) {
     if (!messages || !Array.isArray(messages) || messages.length === 0) {
       return new Response('Messages are required', { status: 400 });
     }
+
+    if (!process.env.ANTHROPIC_API_KEY) {
+      return new Response('AI features are not configured on this deployment.', {
+        status: 503,
+      });
+    }
+
+    const anthropic = new Anthropic({
+      apiKey: process.env.ANTHROPIC_API_KEY,
+    });
 
     // Build Anthropic messages format
     const anthropicMessages = messages.map(
@@ -79,7 +85,7 @@ export async function POST(req: NextRequest) {
     const stream = anthropic.messages.stream({
       model: model || 'claude-sonnet-4-20250514',
       max_tokens: 8192,
-      system: `You are CalorieAI, an AI-powered nutrition assistant by Akira AI Data. Today's date is ${today}. You are knowledgeable, helpful, and direct. Answer questions confidently and thoroughly. When you know the answer, give it directly without unnecessary caveats. Provide detailed, substantive responses like a knowledgeable expert would.`,
+      system: `You are Posha, an AI-powered nutrition assistant by Akira AI Data. Today's date is ${today}. You are knowledgeable, helpful, and direct. Answer questions confidently and thoroughly. When you know the answer, give it directly without unnecessary caveats. Provide detailed, substantive responses like a knowledgeable expert would.`,
       messages: anthropicMessages,
     });
 

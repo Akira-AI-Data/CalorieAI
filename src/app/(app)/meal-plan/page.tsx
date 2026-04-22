@@ -1,41 +1,26 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
-import { CalendarDays, ChevronLeft, ChevronRight, Trash2, Plus, X, Search, Bookmark, Globe, Clock, ShoppingCart } from 'lucide-react'
+import { CalendarDays, ChevronLeft, ChevronRight, Trash2, Plus, X, Search, Bookmark, Globe, Clock, ShoppingCart, Sparkles, Loader2 } from 'lucide-react'
 import { FluentEmoji } from '@/components/ui/FluentEmoji'
+import { RECIPES, type Recipe } from '@/data/recipes'
+import { planNutritionSmartWeek, type PlannerSettings } from '@/lib/mealPlanner'
+import {
+  getLocalDateKey,
+  getWeekDates,
+  loadMealPlan,
+  loadTrackerSettings,
+  saveMealPlan,
+  type MealType,
+  type MealPlanData,
+  type MealPlanEntry,
+} from '@/lib/nutritionTracker'
 
-interface MealEntry {
-  name: string
-  emoji?: string
-  cuisine?: string
-  prepTime?: string
-}
-
-interface MealPlanData {
-  [date: string]: {
-    [mealType: string]: MealEntry
-  }
-}
-
-interface Recipe {
-  name: string
-  emoji?: string
-  description?: string
-  category?: string
-  cuisine?: string
-  prepTime?: string
-  ageRange?: string
-  nutrients?: string[]
-  ingredients?: string[]
-  instructions?: string[]
-}
-
-const MEALPLAN_KEY = 'calorieai_mealplan'
-const SAVED_RECIPES_KEY = 'calorieai_saved_recipes'
-const PANTRY_KEY = 'calorieai_pantry'
-const SHOPPING_KEY = 'calorieai_shopping'
-const mealTypes = ['breakfast', 'lunch', 'dinner', 'snack']
+const SAVED_RECIPES_KEY = 'posha_saved_recipes'
+const PANTRY_KEY = 'posha_pantry'
+const SHOPPING_KEY = 'posha_shopping'
+const mealTypes: MealType[] = ['breakfast', 'lunch', 'dinner', 'snack']
 
 interface PantryItem {
   id: string
@@ -93,7 +78,7 @@ function addMissingIngredientsToShopping(ingredients: string[]) {
   const pantryNames = new Set(pantry.map((p) => p.name.toLowerCase().trim()))
   const shoppingNames = new Set(shopping.map((s) => s.name.toLowerCase().trim()))
 
-  let updated = [...shopping]
+  const updated = [...shopping]
   let addedCount = 0
 
   for (const ing of ingredients) {
@@ -136,31 +121,8 @@ function addMissingIngredientsToShopping(ingredients: string[]) {
   return addedCount
 }
 
-function getWeekDates(baseDate: Date): string[] {
-  const d = new Date(baseDate)
-  const day = d.getDay()
-  const diff = d.getDate() - day + (day === 0 ? -6 : 1) // Monday start
-  const monday = new Date(d)
-  monday.setDate(diff)
-  const dates: string[] = []
-  for (let i = 0; i < 7; i++) {
-    const dd = new Date(monday)
-    dd.setDate(monday.getDate() + i)
-    dates.push(dd.toISOString().split('T')[0])
-  }
-  return dates
-}
-
-function loadMealPlan(): MealPlanData {
-  try {
-    return JSON.parse(localStorage.getItem(MEALPLAN_KEY) || '{}')
-  } catch {
-    return {}
-  }
-}
-
-function saveMealPlan(plan: MealPlanData) {
-  localStorage.setItem(MEALPLAN_KEY, JSON.stringify(plan))
+function loadPlannerSettings(): PlannerSettings {
+  return loadTrackerSettings()
 }
 
 function loadSavedRecipes(): Recipe[] {
@@ -177,7 +139,7 @@ function RecipePicker({
   onSelect,
   onClose,
 }: {
-  mealType: string
+  mealType: MealType
   onSelect: (recipe: Recipe) => void
   onClose: () => void
 }) {
@@ -280,29 +242,32 @@ function RecipePicker({
 
 // ── Main Page ────────────────────────────────────────────────────────
 export default function MealPlanPage() {
-  const [mealPlan, setMealPlan] = useState<MealPlanData>({})
+  const [mealPlan, setMealPlan] = useState<MealPlanData>(() => {
+    if (typeof window === 'undefined') return {}
+    return loadMealPlan()
+  })
   const [weekOffset, setWeekOffset] = useState(0)
-  const [pickerSlot, setPickerSlot] = useState<{ date: string; mealType: string } | null>(null)
+  const [pickerSlot, setPickerSlot] = useState<{ date: string; mealType: MealType } | null>(null)
+  const [planningWeek, setPlanningWeek] = useState(false)
+  const [statusNotice, setStatusNotice] = useState<{ message: string; href?: string; cta?: string } | null>(null)
 
   const baseDate = new Date()
   baseDate.setDate(baseDate.getDate() + weekOffset * 7)
   const weekDates = getWeekDates(baseDate)
-  const todayStr = new Date().toISOString().split('T')[0]
+  const todayStr = getLocalDateKey()
 
-  // Load meal plan
-  useEffect(() => {
-    setMealPlan(loadMealPlan())
-  }, [])
-
-  function getMeal(date: string, mealType: string): MealEntry | null {
+  function getMeal(date: string, mealType: MealType): MealPlanEntry | null {
     return mealPlan[date]?.[mealType] || null
   }
 
-  function handleSlotClick(date: string, mealType: string) {
+  function handleSlotClick(date: string, mealType: MealType) {
     setPickerSlot({ date, mealType })
   }
 
-  const [shoppingNotice, setShoppingNotice] = useState<string | null>(null)
+  function showStatusNotice(message: string, options?: { href?: string; cta?: string }) {
+    setStatusNotice({ message, ...options })
+    setTimeout(() => setStatusNotice(null), 4000)
+  }
 
   function handlePickRecipe(recipe: Recipe) {
     if (!pickerSlot) return
@@ -323,13 +288,15 @@ export default function MealPlanPage() {
     if (recipe.ingredients && recipe.ingredients.length > 0) {
       const added = addMissingIngredientsToShopping(recipe.ingredients)
       if (added > 0) {
-        setShoppingNotice(`${added} ingredient${added > 1 ? 's' : ''} added to Shopping List`)
-        setTimeout(() => setShoppingNotice(null), 4000)
+        showStatusNotice(
+          `${added} ingredient${added > 1 ? 's' : ''} added to Shopping List`,
+          { href: '/shopping', cta: 'View' }
+        )
       }
     }
   }
 
-  function removeMeal(date: string, mealType: string) {
+  function removeMeal(date: string, mealType: MealType) {
     const updated = { ...mealPlan }
     if (updated[date]) {
       delete updated[date][mealType]
@@ -337,6 +304,57 @@ export default function MealPlanPage() {
     }
     setMealPlan(updated)
     saveMealPlan(updated)
+  }
+
+  function handlePlanMyWeek() {
+    setPlanningWeek(true)
+
+    const targetWeekDates = [...weekDates]
+    const settings = loadPlannerSettings()
+    const result = planNutritionSmartWeek(RECIPES, targetWeekDates, settings)
+    const updated = { ...mealPlan }
+
+    for (const date of targetWeekDates) {
+      const existingDayPlan = updated[date] || {}
+      const plannedDay = result.plan[date] || {}
+
+      for (const mealType of mealTypes) {
+        if (!existingDayPlan[mealType] && plannedDay[mealType]) {
+          existingDayPlan[mealType] = plannedDay[mealType]
+        }
+      }
+
+      if (Object.keys(existingDayPlan).length > 0) updated[date] = existingDayPlan
+    }
+
+    setMealPlan(updated)
+    saveMealPlan(updated)
+
+    const shoppingIngredients = result.selectedRecipes.flatMap((recipe) => recipe.ingredients ?? [])
+    const added = shoppingIngredients.length > 0
+      ? addMissingIngredientsToShopping(shoppingIngredients)
+      : 0
+    const restrictionSummary =
+      result.restrictions.summaryLabels.length > 0
+        ? ` using ${result.restrictions.summaryLabels.slice(0, 3).join(', ')}${
+            result.restrictions.summaryLabels.length > 3 ? ', and more' : ''
+          }`
+        : ''
+
+    if (added > 0) {
+      showStatusNotice(
+        `Week planned${restrictionSummary}. ${added} ingredient${added > 1 ? 's' : ''} added to Shopping List.`,
+        { href: '/shopping', cta: 'View' }
+      )
+    } else if (result.unmetMealTypes.length > 0) {
+      showStatusNotice(
+        `Week planned${restrictionSummary}, but some ${result.unmetMealTypes.join(', ')} slots were left open.`
+      )
+    } else {
+      showStatusNotice(`Week planned with nutrition-smart meals${restrictionSummary}.`)
+    }
+
+    setPlanningWeek(false)
   }
 
   return (
@@ -365,6 +383,15 @@ export default function MealPlanPage() {
           >
             <ChevronRight className="w-5 h-5" />
           </button>
+          <div className="h-6 w-px bg-border mx-1" />
+          <button
+            onClick={handlePlanMyWeek}
+            disabled={planningWeek}
+            className="px-3 py-1.5 text-sm font-medium text-white bg-primary rounded-xl hover:bg-primary/90 transition-colors disabled:opacity-70 disabled:cursor-not-allowed flex items-center gap-1.5"
+          >
+            {planningWeek ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
+            Plan My Week
+          </button>
         </div>
       </div>
 
@@ -376,6 +403,15 @@ export default function MealPlanPage() {
           <Link href="/my-recipes" className="font-semibold underline underline-offset-2 text-primary">My Recipes</Link>
           {' '}or discover new ones in the{' '}
           <Link href="/cookbook" className="font-semibold underline underline-offset-2 text-primary">Cookbook</Link>
+          .{' '}
+          <button
+            onClick={handlePlanMyWeek}
+            disabled={planningWeek}
+            className="font-semibold underline underline-offset-2 text-primary disabled:opacity-70"
+          >
+            Plan My Week
+          </button>{' '}
+          fills the current week using your saved allergies and excluded ingredients.
         </p>
       </div>
 
@@ -453,15 +489,15 @@ export default function MealPlanPage() {
         />
       )}
 
-      {/* Shopping List Toast */}
-      {shoppingNotice && (
+      {/* Status Toast */}
+      {statusNotice && (
         <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 animate-in fade-in slide-in-from-bottom-4 duration-300">
           <Link
-            href="/shopping"
+            href={statusNotice.href || '/shopping'}
             className="flex items-center gap-2 bg-primary text-white px-5 py-3 rounded-xl shadow-lg shadow-accent/20 text-sm font-medium hover:bg-primary/80 transition-colors"
           >
             <ShoppingCart className="w-4 h-4" />
-            {shoppingNotice}
+            {statusNotice.message}
             <span className="text-white/70 text-xs ml-1">→ View</span>
           </Link>
         </div>

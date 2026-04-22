@@ -1,9 +1,9 @@
 @AGENTS.md
 
-# NourishSnap - AI-Powered Calorie Tracking App
+# Posha - AI-Powered Calorie Tracking App
 
 ## Project Overview
-NourishSnap is an AI-powered calorie tracking app with a 3D animated landing page. Built with Next.js 16, React 19, and Tailwind CSS 4. The app combines a marketing landing page with a Claude AI chatbot backend (repurposable as a nutrition AI assistant).
+Posha is an AI-powered calorie tracking app with a 3D animated landing page. Built with Next.js 16, React 19, and Tailwind CSS 4. The app combines a marketing landing page with a Claude AI chatbot backend (repurposable as a nutrition AI assistant).
 
 ## Tech Stack
 - **Framework**: Next.js 16.2.2 (App Router, Turbopack)
@@ -45,7 +45,7 @@ Chatbot/
 ```
 
 ## Brand & Design
-- **Name**: NourishSnap
+- **Name**: Posha
 - **Logo**: Camera aperture + leaf SVG (src/components/landing/Logo.tsx)
 - **Primary color**: Green `#22C55E`
 - **Accent**: Amber `#F59E0B`

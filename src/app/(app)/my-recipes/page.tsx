@@ -18,8 +18,8 @@ interface Recipe {
   savedAt?: string
 }
 
-const SAVED_RECIPES_KEY = 'calorieai_saved_recipes'
-const MEALPLAN_KEY = 'calorieai_mealplan'
+const SAVED_RECIPES_KEY = 'posha_saved_recipes'
+const MEALPLAN_KEY = 'posha_mealplan'
 
 function loadSavedRecipes(): Recipe[] {
   try {

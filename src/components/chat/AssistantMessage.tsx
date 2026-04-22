@@ -27,7 +27,7 @@ export const AssistantMessage = memo(function AssistantMessage({
     <div className="flex gap-3 message-appear">
       <Avatar role="assistant" />
       <div className="flex-1 min-w-0">
-        <div className="font-medium text-sm mb-1 text-foreground">CalorieAI</div>
+        <div className="font-medium text-sm mb-1 text-foreground">Posha</div>
         {content ? (
           <MarkdownRenderer content={content} />
         ) : (

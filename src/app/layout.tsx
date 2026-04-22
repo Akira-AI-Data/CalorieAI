@@ -8,8 +8,12 @@ const outfit = Outfit({ variable: '--font-outfit', subsets: ['latin'], display: 
 const manrope = Manrope({ variable: '--font-manrope', subsets: ['latin'], display: 'swap' });
 
 export const metadata: Metadata = {
-  title: 'CalorieAI',
-  description: 'CalorieAI - AI-powered calorie tracking. Snap, track, and thrive.',
+  metadataBase: new URL('https://www.myposha.com'),
+  title: 'Posha',
+  description: 'Posha - AI-powered calorie tracking. Snap, track, and thrive.',
+  alternates: {
+    canonical: 'https://www.myposha.com',
+  },
   manifest: '/manifest.json',
   icons: {
     icon: '/favicon.png',
@@ -18,7 +22,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
-    title: 'CalorieAI',
+    title: 'Posha',
   },
 };
 

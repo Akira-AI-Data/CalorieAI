@@ -33,10 +33,10 @@ interface MealPlanData {
   }
 }
 
-const SHOPPING_KEY = 'calorieai_shopping'
-const MEALPLAN_KEY = 'calorieai_mealplan'
-const PANTRY_KEY = 'calorieai_pantry'
-const SAVED_RECIPES_KEY = 'calorieai_saved_recipes'
+const SHOPPING_KEY = 'posha_shopping'
+const MEALPLAN_KEY = 'posha_mealplan'
+const PANTRY_KEY = 'posha_pantry'
+const SAVED_RECIPES_KEY = 'posha_saved_recipes'
 
 const UNITS = ['pcs', 'g', 'kg', 'ml', 'L', 'cups', 'tbsp', 'tsp', 'oz', 'lb']
 

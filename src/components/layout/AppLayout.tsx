@@ -16,8 +16,8 @@ function ShoppingReminderToast() {
       const detail = (e as CustomEvent).detail;
       setReminder({ count: detail.count });
     }
-    window.addEventListener('calorieai-shopping-reminder', handler);
-    return () => window.removeEventListener('calorieai-shopping-reminder', handler);
+    window.addEventListener('posha-shopping-reminder', handler);
+    return () => window.removeEventListener('posha-shopping-reminder', handler);
   }, []);
 
   if (!reminder) return null;

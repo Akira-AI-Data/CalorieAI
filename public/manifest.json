@@ -1,6 +1,6 @@
 {
-  "name": "CalorieAI",
-  "short_name": "CalorieAI",
+  "name": "Posha",
+  "short_name": "Posha",
   "description": "AI-powered calorie tracking, meal planning, and nutrition intelligence",
   "start_url": "/dashboard",
   "scope": "/",

@@ -91,7 +91,7 @@ export default function OnboardingPage() {
       <div className="max-w-xl mx-auto">
         <div className="flex items-center gap-2 mb-6">
           <Sparkles className="w-6 h-6 text-primary" />
-          <h1 className="text-3xl font-bold text-foreground">Welcome to CalorieAI</h1>
+          <h1 className="text-3xl font-bold text-foreground">Welcome to Posha</h1>
         </div>
         <p className="text-muted-foreground mb-8">
           A few quick details so we can personalise your nutrition plan.
@@ -178,7 +178,7 @@ export default function OnboardingPage() {
             className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-primary text-white font-semibold hover:bg-primary/90 disabled:opacity-60 transition-colors"
           >
             {loading && <Loader2 className="w-4 h-4 animate-spin" />}
-            Continue to CalorieAI
+            Continue to Posha
           </button>
         </form>
       </div>

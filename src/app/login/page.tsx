@@ -39,6 +39,7 @@ export default function LoginPage() {
         email,
         password,
         redirect: false,
+        callbackUrl: '/dashboard',
       });
 
       if (result?.error) {
@@ -47,7 +48,7 @@ export default function LoginPage() {
         return;
       }
 
-      window.location.href = '/dashboard';
+      window.location.href = result?.url || '/dashboard';
     } catch {
       setError('Something went wrong. Please try again.');
       setLoading(false);
@@ -67,7 +68,7 @@ export default function LoginPage() {
             <Sparkles className="w-7 h-7 text-white" />
           </div>
           <h1 className="text-2xl font-semibold text-foreground">
-            {isSignUp ? 'Create your account' : 'Sign in to CalorieAI'}
+            {isSignUp ? 'Create your account' : 'Sign in to Posha'}
           </h1>
           <p className="text-muted-foreground text-sm mt-1">
             {isSignUp

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'calorieai-v2';
+const CACHE_NAME = 'posha-v2';
 const STATIC_ASSETS = [
   '/',
   '/manifest.json',

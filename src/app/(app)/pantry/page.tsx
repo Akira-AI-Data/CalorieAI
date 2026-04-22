@@ -13,7 +13,7 @@ interface PantryItem {
 
 const unitOptions = ['g', 'kg', 'ml', 'L', 'cups', 'pcs', 'tbsp', 'tsp']
 
-const PANTRY_KEY = 'calorieai_pantry'
+const PANTRY_KEY = 'posha_pantry'
 
 function loadPantry(): PantryItem[] {
   try {

@@ -185,7 +185,7 @@ export function ChatInput() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Message CalorieAI..."
+              placeholder="Message Posha..."
               className="flex-1 bg-transparent text-foreground text-[15px] resize-none outline-none placeholder:text-muted-foreground min-h-[24px] max-h-[200px] py-1.5"
               minRows={1}
               maxRows={6}
@@ -213,7 +213,7 @@ export function ChatInput() {
           </div>
         </div>
         <p className="text-xs text-muted-foreground text-center mt-2">
-          CalorieAI can make mistakes. Please double-check responses.
+          Posha can make mistakes. Please double-check responses.
         </p>
       </div>
     </div>

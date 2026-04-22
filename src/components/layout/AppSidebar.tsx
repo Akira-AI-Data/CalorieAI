@@ -59,7 +59,7 @@ export function AppSidebar() {
               style={{ width: open || isMobile ? undefined : 0, opacity: open || isMobile ? 1 : 0 }}
             >
               <span className="block text-sm font-semibold text-gray-900 dark:text-gray-100 whitespace-nowrap">
-                CalorieAI
+                Posha
               </span>
               <span className="block text-xs text-gray-600 dark:text-gray-400 whitespace-nowrap">
                 {userName} · {userPlan}
@@ -144,7 +144,7 @@ export function AppSidebar() {
         </button>
         <Link href="/dashboard" className="flex items-center gap-2.5 ml-3">
           <Logo />
-          <span className="text-base font-semibold text-gray-900 dark:text-gray-100">CalorieAI</span>
+          <span className="text-base font-semibold text-gray-900 dark:text-gray-100">Posha</span>
         </Link>
       </header>
 

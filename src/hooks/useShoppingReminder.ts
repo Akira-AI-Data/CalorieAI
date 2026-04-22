@@ -2,9 +2,9 @@
 
 import { useEffect, useRef, useCallback } from 'react';
 
-const SETTINGS_KEY = 'calorieai_settings';
-const SHOPPING_KEY = 'calorieai_shopping';
-const REMINDER_COOLDOWN_KEY = 'calorieai_shopping_reminder_last';
+const SETTINGS_KEY = 'posha_settings';
+const SHOPPING_KEY = 'posha_shopping';
+const REMINDER_COOLDOWN_KEY = 'posha_shopping_reminder_last';
 const MIN_DISTANCE_KM = 2;
 const COOLDOWN_MS = 30 * 60 * 1000; // 30 minutes between reminders
 
@@ -102,7 +102,7 @@ export function useShoppingReminder() {
 
     // Also dispatch a custom event that any component can listen to
     window.dispatchEvent(
-      new CustomEvent('calorieai-shopping-reminder', {
+      new CustomEvent('posha-shopping-reminder', {
         detail: { count },
       })
     );
