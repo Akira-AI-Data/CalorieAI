@@ -1,0 +1,13 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.myposha.app",
+      "sha256_cert_fingerprints": [
+        "F6:4C:E4:AB:6F:60:53:36:98:DF:A8:D9:8C:78:E0:E6:23:A8:CD:5A:FF:BD:52:55:EF:DF:E0:7E:DD:6A:14:F4",
+        "D1:12:DF:13:55:A4:43:1E:EF:21:03:14:6D:F2:9C:16:67:9C:14:FD:20:55:94:02:53:D5:5A:A0:C2:36:A1:7B"
+      ]
+    }
+  }
+]

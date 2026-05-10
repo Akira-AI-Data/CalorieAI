@@ -8,6 +8,14 @@ const config: CapacitorConfig = {
     url: 'https://www.myposha.com',
     cleartext: false,
   },
+  plugins: {
+    CapacitorCookies: {
+      enabled: true,
+    },
+    CapacitorHttp: {
+      enabled: true,
+    },
+  },
 };
 
 export default config;
